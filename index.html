@@ -382,7 +382,7 @@ const GH_BRANCH = 'main';
 const GH_FILE   = 'data.json';
 const GH_API    = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
 const ADMIN_USERS = ['sschaaf2'];
-
+const WRITE_TOKEN = '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'; // your personal access token here
 
 // ═══════════════════════════════════════════
 //  TOURNAMENT DATA
@@ -514,13 +514,14 @@ async function getData(){
 }
 
 async function setData(data){
-  if(!GH_TOKEN){ toast('GitHub token not connected!','err'); return; }
+  const token = GH_TOKEN || WRITE_TOKEN;
+  if(!token){ toast('No write token available!','err'); return; }
   const content=btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))));
   const body={message:'Update tournament data',content,branch:GH_BRANCH};
   if(fileSHA) body.sha=fileSHA;
   const res=await fetch(GH_API,{
     method:'PUT',
-    headers:{'Authorization':`token ${GH_TOKEN}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+    headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
     body:JSON.stringify(body)
   });
   if(!res.ok){ const e=await res.json(); throw new Error(`PUT ${res.status}: ${e.message}`); }
@@ -574,8 +575,6 @@ async function doRegister(){
       openTokenSetup();
       return;
     }
-    // Use embedded read token for registration reads
-    GH_TOKEN = EMBEDDED_READ_TOKEN;
   }
 
   setAuthLoading(true);
