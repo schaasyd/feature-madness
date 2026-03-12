@@ -659,49 +659,122 @@ async function doAdvance(cur){
     }
     state.meta.roundStatus[cur]='complete';
     const next=nextRound(cur);
+
     if(next==='finalFour'){
       const rw={};
-      for(const [rk] of Object.entries(REGIONS))
-        rw[rk]=Object.values(state.bracket[rk].elite8||{})[0]?.winner||null;
-      state.bracket.finalFour.sf1.teamA=rw.east; state.bracket.finalFour.sf1.teamB=rw.south;
-      state.bracket.finalFour.sf2.teamA=rw.west; state.bracket.finalFour.sf2.teamB=rw.midwest;
+      for(const [rk] of Object.entries(REGIONS)){
+        const e8matches=Object.values(state.bracket[rk]?.elite8||{});
+        rw[rk]=e8matches[0]?.winner||null;
+      }
+      const missing=Object.entries(rw).filter(([,v])=>!v).map(([k])=>k);
+      if(missing.length){
+        toast(`❌ Missing Elite 8 winners for: ${missing.join(', ')}`, 'err');
+        return;
+      }
+      state.bracket.finalFour.sf1={
+        id:'sf1', label:'East vs South',
+        teamA:rw.east,  seedA:null,
+        teamB:rw.south, seedB:null,
+        winner:null
+      };
+      state.bracket.finalFour.sf2={
+        id:'sf2', label:'West vs Midwest',
+        teamA:rw.west,    seedA:null,
+        teamB:rw.midwest, seedB:null,
+        winner:null
+      };
+      state.meta.currentRound='finalFour';
+      state.meta.roundStatus.finalFour='active';
+
     } else {
       for(const [rk] of Object.entries(REGIONS)){
         const cms=Object.values(state.bracket[rk][cur]);
         const nm={};
         for(let i=0;i<cms.length;i+=2){
           const id=`m${i/2+1}`;
-          nm[id]={id,seedA:cms[i].seedA,teamA:cms[i].winner,seedB:cms[i+1].seedA,teamB:cms[i+1].winner,winner:null};
+          nm[id]={
+            id,
+            seedA:cms[i].seedA,   teamA:cms[i].winner,
+            seedB:cms[i+1].seedA, teamB:cms[i+1].winner,
+            winner:null
+          };
         }
         state.bracket[rk][next]=nm;
       }
+      state.meta.currentRound=next;
+      state.meta.roundStatus[next]='active';
     }
-    state.meta.currentRound=next;
-    state.meta.roundStatus[next]='active';
+
   } else if(cur==='finalFour'){
-    const sf1=state.bracket.finalFour.sf1, sf2=state.bracket.finalFour.sf2;
+    const sf1=state.bracket.finalFour.sf1;
+    const sf2=state.bracket.finalFour.sf2;
+
+    if(!sf1.teamA||!sf1.teamB||!sf2.teamA||!sf2.teamB){
+      toast('❌ Final Four teams are missing.','err');
+      return;
+    }
+
     const {vA:v1A,vB:v1B}=getVotes('finalFour_sf1',sf1.teamA,sf1.teamB);
     const {vA:v2A,vB:v2B}=getVotes('finalFour_sf2',sf2.teamA,sf2.teamB);
-    sf1.winner=determineWinner(sf1,v1A,v1B,sf1.seedA,sf1.seedB);
-    sf2.winner=determineWinner(sf2,v2A,v2B,sf2.seedA,sf2.seedB);
+
+    console.log(`SF1: ${sf1.teamA}(${v1A}) vs ${sf1.teamB}(${v1B})`);
+    console.log(`SF2: ${sf2.teamA}(${v2A}) vs ${sf2.teamB}(${v2B})`);
+
+    sf1.winner = v1A >= v1B ? sf1.teamA : sf1.teamB;
+    sf2.winner = v2A >= v2B ? sf2.teamA : sf2.teamB;
+
+    console.log('SF1 winner:', sf1.winner);
+    console.log('SF2 winner:', sf2.winner);
+
+    if(!sf1.winner||!sf2.winner){
+      toast('❌ Could not determine Final Four winners.','err');
+      return;
+    }
+
     state.meta.roundStatus.finalFour='complete';
-    state.bracket.championship.teamA=sf1.winner;
-    state.bracket.championship.teamB=sf2.winner;
+
+    state.bracket.championship={
+      teamA:  sf1.winner,
+      teamB:  sf2.winner,
+      seedA:  null,
+      seedB:  null,
+      winner: null
+    };
+
     state.meta.currentRound='championship';
     state.meta.roundStatus.championship='active';
+
   } else if(cur==='championship'){
     const ch=state.bracket.championship;
-    const {vA,vB}=getVotes('championship',ch.teamA,ch.teamB);
-    ch.winner=determineWinner(ch,vA,vB,ch.seedA,ch.seedB);
-    state.champion=ch.winner; state.meta.roundStatus.championship='complete';
-  }
-  calculateScores();
-  try{
-    await setData(state); renderAll();
-    toast(`✅ Advanced to ${ALL_RND_NAME[state.meta.currentRound]||'Complete'}!`,'ok');
-  }catch(e){ toast('Advance failed: '+e.message,'err'); }
-}
 
+    if(!ch.teamA||!ch.teamB){
+      toast('❌ Championship teams are missing.','err');
+      return;
+    }
+
+    const {vA,vB}=getVotes('championship',ch.teamA,ch.teamB);
+
+    console.log(`Championship: ${ch.teamA}(${vA}) vs ${ch.teamB}(${vB})`);
+
+    ch.winner = vA >= vB ? ch.teamA : ch.teamB;
+
+    console.log('Champion:', ch.winner);
+
+    state.champion=ch.winner;
+    state.meta.roundStatus.championship='complete';
+    state.meta.currentRound='complete';
+  }
+
+  calculateScores();
+
+  try{
+    await setData(state);
+    renderAll();
+    toast(`✅ Advanced to ${ALL_RND_NAME[state.meta.currentRound]||'Complete'}!`,'ok');
+  }catch(e){
+    toast('Advance failed: '+e.message,'err');
+  }
+}
 function nextRound(cur){
   const o=['round1','round2','sweet16','elite8','finalFour','championship'];
   return o[o.indexOf(cur)+1];
