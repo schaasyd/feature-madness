@@ -1,8 +1,329 @@
 {
   "meta": {
-    "initialized": false
+    "initialized": true,
+    "currentRound": "round1",
+    "roundStatus": {
+      "round1": "active",
+      "round2": "pending",
+      "sweet16": "pending",
+      "elite8": "pending",
+      "finalFour": "pending",
+      "championship": "pending"
+    }
   },
-  "bracket": {},
+  "bracket": {
+    "east": {
+      "round1": {
+        "m1": {
+          "id": "m1",
+          "seedA": 1,
+          "teamA": "Remote Start",
+          "seedB": 16,
+          "teamB": "Smart Hitch",
+          "winner": null
+        },
+        "m2": {
+          "id": "m2",
+          "seedA": 8,
+          "teamA": "BlueCruise",
+          "seedB": 9,
+          "teamB": "Trail Control",
+          "winner": null
+        },
+        "m3": {
+          "id": "m3",
+          "seedA": 5,
+          "teamA": "Android Auto",
+          "seedB": 12,
+          "teamB": "Multi-Access Tailgate",
+          "winner": null
+        },
+        "m4": {
+          "id": "m4",
+          "seedA": 4,
+          "teamA": "Selectable Drive Modes",
+          "seedB": 13,
+          "teamB": "Vehicle Health Alert",
+          "winner": null
+        },
+        "m5": {
+          "id": "m5",
+          "seedA": 6,
+          "teamA": "Navigation Systems",
+          "seedB": 11,
+          "teamB": "Ambient Lighting",
+          "winner": null
+        },
+        "m6": {
+          "id": "m6",
+          "seedA": 3,
+          "teamA": "Surround View Cameras",
+          "seedB": 14,
+          "teamB": "Custom Drive Modes",
+          "winner": null
+        },
+        "m7": {
+          "id": "m7",
+          "seedA": 7,
+          "teamA": "Pro Power Onboard",
+          "seedB": 10,
+          "teamB": "911 Assist",
+          "winner": null
+        },
+        "m8": {
+          "id": "m8",
+          "seedA": 2,
+          "teamA": "CarPlay",
+          "seedB": 15,
+          "teamB": "Zone Lighting",
+          "winner": null
+        }
+      },
+      "round2": {},
+      "sweet16": {},
+      "elite8": {}
+    },
+    "west": {
+      "round1": {
+        "m1": {
+          "id": "m1",
+          "seedA": 1,
+          "teamA": "Seat Temperature Control",
+          "seedB": 16,
+          "teamB": "Rapid Launch",
+          "winner": null
+        },
+        "m2": {
+          "id": "m2",
+          "seedA": 8,
+          "teamA": "Pre-Collision Assist",
+          "seedB": 9,
+          "teamB": "WiFi Hotspot",
+          "winner": null
+        },
+        "m3": {
+          "id": "m3",
+          "seedA": 5,
+          "teamA": "Stolen Vehicle Services",
+          "seedB": 12,
+          "teamB": "Charge & Departure Scheduling",
+          "winner": null
+        },
+        "m4": {
+          "id": "m4",
+          "seedA": 4,
+          "teamA": "Power Running Boards",
+          "seedB": 13,
+          "teamB": "Forward Facing Spotlight",
+          "winner": null
+        },
+        "m5": {
+          "id": "m5",
+          "seedA": 6,
+          "teamA": "Telematics Data Collection",
+          "seedB": 11,
+          "teamB": "Trailer Profiles & Settings",
+          "winner": null
+        },
+        "m6": {
+          "id": "m6",
+          "seedA": 3,
+          "teamA": "Voice Recognition Systems",
+          "seedB": 14,
+          "teamB": "Rejuvenate",
+          "winner": null
+        },
+        "m7": {
+          "id": "m7",
+          "seedA": 7,
+          "teamA": "Police Dark Car",
+          "seedB": 10,
+          "teamB": "Trail 1-Pedal Driving",
+          "winner": null
+        },
+        "m8": {
+          "id": "m8",
+          "seedA": 2,
+          "teamA": "Heated Mirrors",
+          "seedB": 15,
+          "teamB": "Delivery Assist",
+          "winner": null
+        }
+      },
+      "round2": {},
+      "sweet16": {},
+      "elite8": {}
+    },
+    "south": {
+      "round1": {
+        "m1": {
+          "id": "m1",
+          "seedA": 1,
+          "teamA": "Fog Lights (Front)",
+          "seedB": 16,
+          "teamB": "Drift Brake",
+          "winner": null
+        },
+        "m2": {
+          "id": "m2",
+          "seedA": 8,
+          "teamA": "Secure Idle",
+          "seedB": 9,
+          "teamB": "Public Charging",
+          "winner": null
+        },
+        "m3": {
+          "id": "m3",
+          "seedA": 5,
+          "teamA": "Auto Vehicle Hold",
+          "seedB": 12,
+          "teamB": "Onboard Scales 2.0",
+          "winner": null
+        },
+        "m4": {
+          "id": "m4",
+          "seedA": 4,
+          "teamA": "Keypad Control",
+          "seedB": 13,
+          "teamB": "Active Exhaust Valve",
+          "winner": null
+        },
+        "m5": {
+          "id": "m5",
+          "seedA": 6,
+          "teamA": "Lincoln Embrace",
+          "seedB": 11,
+          "teamB": "Upfitter Suite",
+          "winner": null
+        },
+        "m6": {
+          "id": "m6",
+          "seedA": 3,
+          "teamA": "Walk Away Lock",
+          "seedB": 14,
+          "teamB": "Performance Shift Indicator",
+          "winner": null
+        },
+        "m7": {
+          "id": "m7",
+          "seedA": 7,
+          "teamA": "Multi-Contour Seat",
+          "seedB": 10,
+          "teamB": "Blind Spot Info System",
+          "winner": null
+        },
+        "m8": {
+          "id": "m8",
+          "seedA": 2,
+          "teamA": "Enhanced Memory",
+          "seedB": 15,
+          "teamB": "Trail Turn Assist",
+          "winner": null
+        }
+      },
+      "round2": {},
+      "sweet16": {},
+      "elite8": {}
+    },
+    "midwest": {
+      "round1": {
+        "m1": {
+          "id": "m1",
+          "seedA": 1,
+          "teamA": "Power Moonroof & Shade",
+          "seedB": 16,
+          "teamB": "Tailgate Mode Audio",
+          "winner": null
+        },
+        "m2": {
+          "id": "m2",
+          "seedA": 8,
+          "teamA": "Driver Statistics Info",
+          "seedB": 9,
+          "teamB": "Auto Inhibit",
+          "winner": null
+        },
+        "m3": {
+          "id": "m3",
+          "seedA": 5,
+          "teamA": "Front Automatic Wiping",
+          "seedB": 12,
+          "teamB": "Start/Stop",
+          "winner": null
+        },
+        "m4": {
+          "id": "m4",
+          "seedA": 4,
+          "teamA": "Daytime Running Light",
+          "seedB": 13,
+          "teamB": "Zero Gravity Seat",
+          "winner": null
+        },
+        "m5": {
+          "id": "m5",
+          "seedA": 6,
+          "teamA": "Power Take Off (PTO)",
+          "seedB": 11,
+          "teamB": "Intelligent Backup Power",
+          "winner": null
+        },
+        "m6": {
+          "id": "m6",
+          "seedA": 3,
+          "teamA": "Super Reset",
+          "seedB": 14,
+          "teamB": "Power Telescoping Mirrors",
+          "winner": null
+        },
+        "m7": {
+          "id": "m7",
+          "seedA": 7,
+          "teamA": "Vehicle Start Inhibit",
+          "seedB": 10,
+          "teamB": "Trailer Light Check",
+          "winner": null
+        },
+        "m8": {
+          "id": "m8",
+          "seedA": 2,
+          "teamA": "First Row Seat Position",
+          "seedB": 15,
+          "teamB": "Off-Road Maps",
+          "winner": null
+        }
+      },
+      "round2": {},
+      "sweet16": {},
+      "elite8": {}
+    },
+    "finalFour": {
+      "sf1": {
+        "id": "sf1",
+        "label": "East vs South",
+        "seedA": null,
+        "teamA": null,
+        "seedB": null,
+        "teamB": null,
+        "winner": null
+      },
+      "sf2": {
+        "id": "sf2",
+        "label": "West vs Midwest",
+        "seedA": null,
+        "teamA": null,
+        "seedB": null,
+        "teamB": null,
+        "winner": null
+      }
+    },
+    "championship": {
+      "seedA": null,
+      "teamA": null,
+      "seedB": null,
+      "teamB": null,
+      "winner": null
+    }
+  },
   "champion": null,
   "picks": {},
   "scores": {},
