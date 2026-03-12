@@ -376,13 +376,13 @@
 // ═══════════════════════════════════════════
 //  CONFIG
 // ═══════════════════════════════════════════
-const GH_OWNER  = 'ford-innersource';
-const GH_REPO   = 'feature-strategy';
-const GH_BRANCH = 'sschaaf2_ford-patch-3';
+const GH_OWNER  = 'schaasyd';
+const GH_REPO   = 'feature-madness';
+const GH_BRANCH = 'main';
 const GH_FILE   = 'data.json';
 const GH_API    = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
 const ADMIN_USERS = ['sschaaf2'];
-const EMBEDDED_READ_TOKEN = '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'; // your admin token here
+
 
 // ═══════════════════════════════════════════
 //  TOURNAMENT DATA
@@ -503,10 +503,9 @@ function updateTokenStatusBanner(){
 //  GITHUB API
 // ═══════════════════════════════════════════
 async function getData(){
-  // Use stored admin token if available, fall back to embedded read token
-  const readToken = GH_TOKEN || getAdminToken() || EMBEDDED_READ_TOKEN;
+  // Public repo — no auth needed for reads
   const res=await fetch(`${GH_API}?ref=${GH_BRANCH}&t=${Date.now()}`,{
-    headers:{'Authorization':`token ${readToken}`,'Accept':'application/vnd.github.v3+json'}
+    headers:{'Accept':'application/vnd.github.v3+json'}
   });
   if(!res.ok) throw new Error(`GET ${res.status}`);
   const json=await res.json();
