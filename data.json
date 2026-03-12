@@ -331,6 +331,10 @@
     "sschaaf2": {
       "displayName": "Sydney",
       "passwordHash": "32f65e6eb411ed420416c4e01971edfa34f93cb41ee92f617a46f2aa797f077a"
+    },
+    "test": {
+      "displayName": "TEST",
+      "passwordHash": "94ee059335e587e501cc4bf90613e0814f00a7b08bc7c648fd865a2af6a22cc2"
     }
   }
 }
