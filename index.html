@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ford Feature Madness 2026 🏀</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #e8eef4; color: #0a1628; min-height: 100vh; }
+
+    header {
+      background: linear-gradient(135deg, #00264d, #003478, #0056b3);
+      padding: 14px 24px; display: flex; align-items: center; justify-content: center;
+      gap: 18px; border-bottom: 3px solid #ff6600; flex-wrap: wrap;
+    }
+    .logo-mark { display:flex; flex-direction:column; align-items:center; line-height:1; border:2px solid #ff6600; border-radius:8px; padding:6px 10px; background:rgba(0,0,0,0.25); }
+    .logo-feature  { font-size:1rem; font-weight:900; color:#fff; letter-spacing:3px; }
+    .logo-sub      { font-size:0.44rem; color:#90b8e0; letter-spacing:1.5px; }
+    .logo-strategy { font-size:1rem; font-weight:900; color:#ff6600; letter-spacing:3px; }
+    .header-text h1 { font-size:1.7rem; font-weight:900; letter-spacing:2px; color:#fff; }
+    .header-text p  { color:#90b8e0; margin-top:3px; font-size:0.88rem; }
+
+    nav { display:flex; justify-content:center; gap:8px; padding:10px 16px; background:#fff; flex-wrap:wrap; border-bottom:2px solid #dde6f0; box-shadow:0 2px 8px rgba(0,0,0,0.06); align-items:center; }
+    nav button { background:#f0f5fa; color:#2a4a6a; border:1px solid #c8d8e8; padding:8px 16px; border-radius:7px; cursor:pointer; font-size:0.86rem; font-weight:600; transition:all 0.2s; }
+    nav button:hover, nav button.active { background:#003478; color:#fff; border-color:#003478; }
+    .user-chip { display:flex; align-items:center; gap:6px; background:#e8f0fa; border:1px solid #c8d8e8; border-radius:20px; padding:5px 12px; font-size:0.8rem; font-weight:600; color:#003478; margin-left:auto; }
+    .user-chip .uname { color:#ff6600; }
+    .user-chip button { background:none; border:none; cursor:pointer; color:#c0392b; font-size:0.8rem; font-weight:700; padding:0 0 0 4px; }
+
+    .page { display:none; padding:16px; }
+    .page.active { display:block; }
+
+    /* ── BRACKET ── */
+    .bracket-scroll { overflow-x:auto; overflow-y:hidden; padding-bottom:16px; background:#f0f5fa; border-radius:12px; border:1px solid #c8d8e8; }
+    .bracket-wrapper { display:flex; align-items:stretch; min-width:1500px; }
+    .bracket-half { display:flex; flex-direction:column; flex:1; }
+    .region-block { display:flex; align-items:stretch; }
+    .bracket-half.right .region-block { flex-direction:row-reverse; }
+
+    .region-label { display:flex; align-items:center; justify-content:center; width:22px; font-size:0.58rem; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; writing-mode:vertical-rl; padding:4px 2px; flex-shrink:0; }
+    .rl-east    { color:#1d6fb5; border-right:2px solid #c8d8e8; background:#e8f0fa; }
+    .rl-west    { color:#c0392b; border-left:2px solid #c8d8e8; background:#fdf0f0; }
+    .rl-south   { color:#1a7a4a; border-right:2px solid #c8d8e8; background:#edf7f2; }
+    .rl-midwest { color:#b8860b; border-left:2px solid #c8d8e8; background:#fdf8e8; }
+    .region-divider { height:2px; background:#c8d8e8; }
+
+    .round-col { display:flex; flex-direction:column; width:148px; flex-shrink:0; }
+    .round-title { font-size:0.58rem; font-weight:700; color:#ff6600; text-transform:uppercase; letter-spacing:0.8px; padding:3px 4px; text-align:center; border-bottom:1px solid #c8d8e8; height:18px; white-space:nowrap; overflow:hidden; background:#fff; }
+    .round-games { display:flex; flex-direction:column; }
+
+    .rc-r1  .game-slot { height:64px; }
+    .rc-r2  .game-slot { height:128px; }
+    .rc-s16 .game-slot { height:256px; }
+    .rc-e8  .game-slot { height:512px; }
+
+    .game-slot { position:relative; display:flex; flex-direction:column; justify-content:center; }
+    .bracket-half.left  .game-slot { padding:2px 10px 2px 3px; } /* connector stub on right */
+    .bracket-half.right .game-slot { padding:2px 3px 2px 10px; } /* connector stub on left */
+
+    .bracket-half.left .round-col:not(.rc-e8) .game-slot.pair-top::after    { content:''; position:absolute; right:4px; top:50%; height:50%; width:2px; background:#b0c4d8; }
+    .bracket-half.left .round-col:not(.rc-e8) .game-slot.pair-bottom::after { content:''; position:absolute; right:4px; top:0;   height:50%; width:2px; background:#b0c4d8; }
+    .bracket-half.left .round-col:not(.rc-e8) .game-slot::before            { content:''; position:absolute; right:4px; top:calc(50% - 1px); width:10px; height:2px; background:#b0c4d8; }
+
+    .bracket-half.right .round-col:not(.rc-e8) .game-slot.pair-top::after    { content:''; position:absolute; left:4px; top:50%; height:50%; width:2px; background:#b0c4d8; }
+    .bracket-half.right .round-col:not(.rc-e8) .game-slot.pair-bottom::after { content:''; position:absolute; left:4px; top:0;   height:50%; width:2px; background:#b0c4d8; }
+    .bracket-half.right .round-col:not(.rc-e8) .game-slot::before            { content:''; position:absolute; left:4px; top:calc(50% - 1px); width:10px; height:2px; background:#b0c4d8; }
+
+    .bkt-matchup { background:#fff; border:1px solid #c8d8e8; border-radius:5px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+    .bkt-matchup.done { border-color:#27ae60; }
+    .bkt-team { display:flex; align-items:center; gap:4px; padding:2px 6px; min-height:25px; border-bottom:1px solid #eaf0f6; font-size:0.65rem; font-weight:600; line-height:1.1; position:relative; overflow:hidden; color:#0a1628; }
+    .bkt-team:last-child { border-bottom:none; }
+    .bkt-team.winner { background:#edfaf3; color:#1a7a4a; }
+    .bkt-team.loser  { opacity:0.35; }
+    .bkt-team.tbd    { color:#8aa0b8; font-style:italic; font-weight:400; }
+    .vote-bar { position:absolute; left:0; top:0; height:100%; background:rgba(0,52,120,0.10); z-index:0; }
+    .bkt-team.winner .vote-bar { background:rgba(26,122,74,0.15); }
+    .bkt-team-content { position:relative; z-index:1; display:flex; align-items:center; gap:4px; width:100%; }
+    .sn { background:#dde6f0; color:#2a4a6a; font-size:0.56rem; font-weight:800; min-width:15px; height:15px; border-radius:3px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .bkt-team.winner .sn { background:#c3f0d8; color:#1a7a4a; }
+    .tn { flex:1; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+    .vote-pct { font-size:0.58rem; color:#5a80a0; flex-shrink:0; font-weight:700; }
+    .bkt-team.winner .vote-pct { color:#1a7a4a; }
+
+    .bracket-center { display:flex; flex-direction:column; align-items:center; justify-content:center; width:190px; flex-shrink:0; padding:8px 6px; gap:8px; background:#f0f5fa; }
+    .champ-box { background:linear-gradient(135deg,#00264d,#003478); border:2px solid #ff6600; border-radius:10px; padding:12px 8px; text-align:center; width:100%; box-shadow:0 4px 16px rgba(0,52,120,0.18); }
+    .champ-trophy { font-size:2rem; display:block; margin-bottom:4px; }
+    .champ-lbl { color:#ff6600; font-size:0.58rem; font-weight:700; text-transform:uppercase; display:block; }
+    .champ-name { color:#ffd700; font-size:0.82rem; font-weight:900; line-height:1.3; margin-top:4px; }
+    .ff-box { background:#fff; border:1px solid #c8d8e8; border-radius:6px; padding:8px; width:100%; }
+    .ff-lbl { color:#cc5500; font-size:0.56rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px; display:block; text-align:center; }
+    .ff-team { display:flex; align-items:center; gap:4px; padding:4px 0; border-bottom:1px solid #eaf0f6; font-size:0.68rem; font-weight:600; color:#0a1628; }
+    .ff-team:last-child { border-bottom:none; }
+    .ff-team.winner { color:#1a7a4a; }
+    .ff-team.tbd    { color:#8aa0b8; font-style:italic; }
+
+    .status-bar { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px; }
+    .sp { padding:4px 12px; border-radius:20px; font-size:0.72rem; font-weight:700; border:1px solid #c8d8e8; background:#fff; color:#8aa0b8; }
+    .sp.active   { background:#003478; color:#fff; border-color:#003478; }
+    .sp.complete { background:#edfaf3; color:#1a7a4a; border-color:#27ae60; }
+
+    .panel { background:#fff; border:1px solid #c8d8e8; border-radius:12px; padding:18px; margin-bottom:18px; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
+    .panel h2 { color:#003478; font-size:0.95rem; margin-bottom:14px; font-weight:700; }
+    .grid-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:12px; }
+    .card { background:#f7fafd; border:1px solid #c8d8e8; border-radius:9px; padding:14px; }
+    .card h4 { color:#2a4a6a; font-size:0.72rem; margin-bottom:10px; text-transform:uppercase; letter-spacing:1px; }
+
+    .row2 { display:flex; gap:7px; align-items:center; margin-bottom:7px; }
+    .pbtn { flex:1; padding:8px 5px; border-radius:6px; border:2px solid #c8d8e8; background:#fff; color:#0a1628; cursor:pointer; font-size:0.74rem; font-weight:600; transition:all 0.2s; text-align:center; }
+    .pbtn:hover { border-color:#003478; }
+    .pbtn.sel { background:#003478; color:#fff; border-color:#003478; }
+    .vs-lbl { color:#8aa0b8; font-size:0.68rem; font-weight:700; flex-shrink:0; }
+
+    .btn { padding:10px 20px; border-radius:8px; border:none; font-weight:700; cursor:pointer; font-size:0.86rem; transition:all 0.2s; }
+    .btn-p { background:#003478; color:white; } .btn-p:hover { background:#0056b3; }
+    .btn-d { background:#c0392b; color:white; } .btn-d:hover { background:#e74c3c; }
+    .btn-s { background:#1a7a4a; color:white; } .btn-s:hover { background:#27ae60; }
+    .btn-o { background:#c2410c; color:white; } .btn-o:hover { background:#ea580c; }
+    .btn-g { background:#f0f5fa; color:#2a4a6a; border:1px solid #c8d8e8 !important; } .btn-g:hover { background:#dde6f0; }
+    .btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+
+    .lb-table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+    .lb-table th { background:#f0f5fa; color:#003478; padding:10px; text-align:left; font-size:0.74rem; text-transform:uppercase; border-bottom:2px solid #c8d8e8; }
+    .lb-table td { padding:10px; border-bottom:1px solid #eaf0f6; color:#0a1628; }
+    .lb-table tr:hover td { background:#f7fafd; }
+    .rank-b { width:26px; height:26px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:900; font-size:0.76rem; }
+    .rb1{background:#ffd700;color:#000;} .rb2{background:#c0c0c0;color:#000;} .rb3{background:#cd7f32;color:#fff;} .rbo{background:#dde6f0;color:#2a4a6a;}
+
+    .ibox { background:#f0f5fa; border-left:4px solid #003478; padding:10px 14px; border-radius:4px; color:#2a4a6a; font-size:0.82rem; margin-bottom:14px; line-height:1.5; }
+    .ibox.warn { border-color:#ff6600; color:#c2410c; background:#fff8f0; }
+    .ibox.ok   { border-color:#27ae60; color:#1a7a4a; background:#edfaf3; }
+    .ibox.err  { border-color:#c0392b; color:#c0392b; background:#fdf0f0; }
+
+    #toast { position:fixed; bottom:22px; right:22px; background:#003478; color:white; padding:12px 18px; border-radius:9px; font-weight:600; font-size:0.86rem; transform:translateY(80px); opacity:0; transition:all 0.3s; z-index:9999; border-left:4px solid #ff6600; max-width:300px; }
+    #toast.show { transform:translateY(0); opacity:1; }
+    #toast.err { background:#c0392b; border-color:#e74c3c; }
+    #toast.ok  { background:#1a7a4a; border-color:#27ae60; }
+
+    .modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center; }
+    .modal-bg.open { display:flex; }
+    .modal { background:#fff; border:1px solid #c8d8e8; border-radius:14px; padding:24px; max-width:500px; width:90%; box-shadow:0 8px 32px rgba(0,0,0,0.15); max-height:80vh; overflow-y:auto; }
+    .modal h3 { color:#003478; margin-bottom:14px; }
+    .modal p  { color:#2a4a6a; margin-bottom:18px; font-size:0.86rem; line-height:1.6; white-space:pre-line; }
+    .modal-btns { display:flex; gap:9px; justify-content:flex-end; }
+
+    /* User prediction highlights */
+    .bkt-team.pick-correct   { outline:2px solid #27ae60; outline-offset:-2px; }
+    .bkt-team.pick-incorrect { outline:2px solid #e74c3c; outline-offset:-2px; }
+    .pick-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .pick-dot.correct   { background:#27ae60; }
+    .pick-dot.incorrect { background:#e74c3c; }
+
+    /* ── AUTH ── */
+    #auth-screen { display:none; position:fixed; inset:0; background:#e8eef4; z-index:2000; align-items:center; justify-content:center; }
+    #auth-screen.open { display:flex; }
+    .auth-box { background:#fff; border:1px solid #c8d8e8; border-radius:16px; padding:36px; max-width:420px; width:90%; text-align:center; box-shadow:0 8px 32px rgba(0,52,120,0.12); }
+    .auth-logo-mark { display:inline-flex; flex-direction:column; align-items:center; border:2px solid #ff6600; border-radius:8px; padding:6px 14px; background:#003478; margin-bottom:10px; }
+    .auth-box h2 { color:#003478; margin-bottom:6px; font-size:1.2rem; }
+    .auth-box > p { color:#5a80a0; font-size:0.84rem; margin-bottom:20px; line-height:1.5; }
+    .auth-tabs { display:flex; background:#f0f5fa; border-radius:8px; padding:3px; margin-bottom:20px; gap:3px; }
+    .auth-tab { flex:1; padding:8px; border-radius:6px; border:none; background:none; cursor:pointer; font-size:0.84rem; font-weight:600; color:#5a80a0; transition:all 0.2s; }
+    .auth-tab.active { background:#fff; color:#003478; box-shadow:0 1px 4px rgba(0,0,0,0.1); }
+    .auth-panel { display:none; text-align:left; }
+    .auth-panel.active { display:block; }
+    .auth-error { color:#c0392b; font-size:0.8rem; margin-bottom:10px; display:none; background:#fdf0f0; border-radius:6px; padding:8px 10px; }
+    .auth-hint { font-size:0.76rem; color:#5a80a0; background:#f0f5fa; border-radius:6px; padding:8px 10px; margin-bottom:12px; line-height:1.5; }
+
+    /* ── TOKEN SETUP (admin only, shown after first login) ── */
+    #token-setup { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:3000; align-items:center; justify-content:center; }
+    #token-setup.open { display:flex; }
+    .token-box { background:#fff; border:1px solid #c8d8e8; border-radius:14px; padding:28px; max-width:440px; width:90%; box-shadow:0 8px 32px rgba(0,0,0,0.15); }
+    .token-box h3 { color:#003478; margin-bottom:8px; }
+    .token-box p  { color:#5a80a0; font-size:0.84rem; margin-bottom:16px; line-height:1.5; }
+
+    input[type="text"],input[type="password"] { background:#f7fafd; border:1px solid #c8d8e8; color:#0a1628; padding:10px 12px; border-radius:7px; font-size:0.86rem; width:100%; margin-bottom:10px; outline:none; transition:border-color 0.2s; }
+    input:focus { border-color:#003478; background:#fff; }
+    label { display:block; color:#2a4a6a; font-size:0.78rem; margin-bottom:4px; font-weight:600; }
+
+    .loading { text-align:center; padding:40px; color:#5a80a0; }
+    .spinner { width:36px; height:36px; border:3px solid #dde6f0; border-top-color:#003478; border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 14px; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    .cp-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:7px; max-height:380px; overflow-y:auto; padding-right:4px; }
+    .cp-btn { padding:9px 7px; border-radius:7px; border:2px solid #c8d8e8; background:#f7fafd; color:#0a1628; cursor:pointer; font-size:0.71rem; font-weight:600; text-align:center; transition:all 0.2s; line-height:1.3; }
+    .cp-btn:hover { border-color:#003478; }
+    .cp-btn.sel { background:#003478; color:#fff; border-color:#003478; }
+    .seed-tag { display:inline-block; background:#dde6f0; color:#2a4a6a; font-size:0.58rem; padding:1px 4px; border-radius:3px; margin-bottom:3px; font-weight:700; }
+    .region-tag { font-size:0.58rem; opacity:0.65; display:block; margin-top:3px; }
+
+    .rtabs { display:flex; gap:5px; margin-bottom:12px; flex-wrap:wrap; }
+    .rtab { padding:6px 13px; border-radius:6px; border:1px solid #c8d8e8; background:#f0f5fa; color:#2a4a6a; cursor:pointer; font-size:0.8rem; font-weight:600; transition:all 0.2s; }
+    .rtab.active { background:#003478; color:#fff; border-color:#003478; }
+
+    .picks-hdr { background:#fff; border:1px solid #c8d8e8; border-radius:11px; padding:16px; margin-bottom:18px; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
+    .picks-hdr h2 { color:#003478; margin-bottom:7px; }
+    .picks-hdr p  { color:#5a80a0; font-size:0.86rem; line-height:1.5; }
+
+    .admin-vote-bar { margin-top:10px; border-top:1px solid #eaf0f6; padding-top:10px; }
+    .avb-row { display:flex; align-items:center; gap:6px; margin-bottom:5px; font-size:0.78rem; color:#0a1628; }
+    .avb-name { flex:1; font-weight:600; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+    .avb-cnt  { color:#ff6600; font-weight:700; min-width:20px; text-align:right; }
+    .avb-track { flex:2; background:#eaf0f6; border-radius:3px; height:6px; overflow:hidden; }
+    .avb-fill  { height:100%; background:#003478; border-radius:3px; }
+    .avb-fill.lead { background:#ff6600; }
+    .projected-lbl    { font-size:0.7rem; color:#5a80a0; margin-bottom:6px; }
+    .projected-winner { font-size:0.78rem; color:#1a7a4a; font-weight:700; margin-top:6px; }
+    .tie-warning      { font-size:0.78rem; color:#c2410c; font-weight:700; margin-top:6px; }
+
+    .validation-banner { background:#fff0f0; border:1px solid #e74c3c; border-radius:8px; padding:12px 16px; margin-bottom:14px; color:#c0392b; font-size:0.84rem; font-weight:600; display:none; }
+    .validation-banner.show { display:block; }
+
+    @media(max-width:768px){
+      header{padding:10px 12px;gap:10px;}
+      .header-text h1{font-size:1.1rem;}
+      .page{padding:8px;}
+      .grid-cards{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ AUTH SCREEN ══ -->
+<div id="auth-screen" class="open">
+  <div class="auth-box">
+    <div class="auth-logo-mark">
+      <span style="font-size:0.9rem;font-weight:900;color:#fff;letter-spacing:3px;">FEATURE</span>
+      <span style="font-size:0.38rem;color:#90b8e0;letter-spacing:1.5px;">Global Tech Strategy</span>
+      <span style="font-size:0.9rem;font-weight:900;color:#ff6600;letter-spacing:3px;">STRATEGY</span>
+    </div>
+    <h2 style="margin-top:10px;">🏀 Feature Madness 2026</h2>
+    <p>Sign in or create an account to submit your picks.</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+      <button class="auth-tab"        onclick="switchAuthTab('register')">Register</button>
+    </div>
+
+    <div id="auth-login" class="auth-panel active">
+      <div id="login-error" class="auth-error"></div>
+      <label>Username</label>
+      <input type="text"     id="login-username" placeholder="Your username" autocomplete="username">
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="Your password" autocomplete="current-password"
+             onkeydown="if(event.key==='Enter') doLogin()">
+      <button class="btn btn-p" style="width:100%;margin-top:4px;" onclick="doLogin()">Sign In →</button>
+    </div>
+
+    <div id="auth-register" class="auth-panel">
+      <div id="register-error" class="auth-error"></div>
+      <div class="auth-hint">📝 No GitHub account needed — just pick a username and password!</div>
+      <label>Display Name <span style="color:#8aa0b8;font-weight:400;">(shown on leaderboard)</span></label>
+      <input type="text"     id="reg-displayname" placeholder="e.g. Detroit Bracket Boss">
+      <label>Username</label>
+      <input type="text"     id="reg-username"    placeholder="e.g. cdsid">
+      <label>Password</label>
+      <input type="password" id="reg-password"    placeholder="Choose a password"
+             onkeydown="if(event.key==='Enter') doRegister()">
+      <button class="btn btn-p" style="width:100%;margin-top:4px;" onclick="doRegister()">Create Account →</button>
+    </div>
+
+    <div id="auth-loading" style="display:none;padding:20px 0;">
+      <div class="spinner"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADMIN TOKEN SETUP (shown after admin first login) ══ -->
+<div id="token-setup" class="open" style="display:none;">
+  <div class="token-box">
+    <h3>🔑 Connect GitHub (Admin Only)</h3>
+    <p>You're registered as admin. Enter your GitHub Personal Access Token to enable tournament management.<br><br>
+    <strong>GitHub → Settings → Developer Settings → Personal Access Tokens (classic)</strong><br>
+    Check <strong>repo</strong> scope, then Configure SSO → Authorize ford-innersource.</p>
+    <div id="token-setup-error" class="auth-error"></div>
+    <label>Personal Access Token</label>
+    <input type="password" id="token-setup-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+           onkeydown="if(event.key==='Enter') submitTokenSetup()">
+    <div style="display:flex;gap:8px;margin-top:4px;">
+      <button class="btn btn-g" style="flex:1;" onclick="skipTokenSetup()">Skip for now</button>
+      <button class="btn btn-p" style="flex:2;" onclick="submitTokenSetup()">Connect & Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <div class="logo-mark">
+    <span class="logo-feature">FEATURE</span>
+    <span class="logo-sub">Global Tech Strategy</span>
+    <span class="logo-strategy">STRATEGY</span>
+  </div>
+  <div class="header-text">
+    <h1>🏀 Ford Feature Madness 2026</h1>
+    <p>64 features · 4 regions · 1 champion</p>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showPage('bracket',event)">🏆 Bracket</button>
+  <button onclick="showPage('picks',event)">📝 My Picks</button>
+  <button onclick="showPage('leaderboard',event)">📊 Leaderboard</button>
+  <button id="admin-nav-btn" onclick="showPage('admin',event)" style="display:none;">⚙️ Admin</button>
+  <div class="user-chip" id="user-chip" style="display:none;">
+    👤 <span class="uname" id="user-chip-name"></span>
+    <button onclick="doLogout()" title="Sign out">✕</button>
+  </div>
+</nav>
+
+<!-- BRACKET -->
+<div id="page-bracket" class="page active">
+  <div id="status-bar" class="status-bar"></div>
+  <div class="bracket-scroll">
+    <div id="bracket-wrapper" class="bracket-wrapper">
+      <div class="loading"><div class="spinner"></div><p>Loading…</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- PICKS -->
+<div id="page-picks" class="page">
+  <div class="picks-hdr">
+    <h2>📝 Submit Your Picks</h2>
+    <p>Predict the overall champion (64 pts!), then pick a winner for every matchup. All picks must be filled before saving.</p>
+  </div>
+  <div id="validation-banner" class="validation-banner"></div>
+  <div id="picks-area"></div>
+</div>
+
+<!-- LEADERBOARD -->
+<div id="page-leaderboard" class="page">
+  <div class="panel">
+    <h2>📊 Leaderboard</h2>
+    <div id="leaderboard-area"><div class="loading"><div class="spinner"></div><p>Loading…</p></div></div>
+    <br><button class="btn btn-p" onclick="loadLeaderboard()">🔄 Refresh</button>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="page-admin" class="page">
+  <div class="panel">
+    <h2>⚙️ Tournament Control</h2>
+    <div id="token-status-banner"></div>
+    <div class="btn-row">
+      <button class="btn btn-s" onclick="initTournament()">🚀 Initialize</button>
+      <button class="btn btn-o" onclick="advanceRoundByVotes()">⏭️ Tally Votes & Advance</button>
+      <button class="btn btn-p" onclick="loadData()">🔄 Refresh</button>
+      <button class="btn btn-d" onclick="confirmReset()">🗑️ Reset</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-g" onclick="openTokenSetup()">🔑 Update GitHub Token</button>
+    </div>
+    <div id="tournament-status"></div>
+  </div>
+  <div class="panel">
+    <h2>🗳️ Vote Tally</h2>
+    <div class="ibox">All submitted picks tallied below. Higher votes wins; ties go to the higher seed.</div>
+    <div class="rtabs" id="admin-region-tabs"></div>
+    <div id="admin-matchups" class="grid-cards"></div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div id="modal" class="modal-bg">
+  <div class="modal">
+    <h3 id="modal-title">Confirm</h3>
+    <p id="modal-body"></p>
+    <div class="modal-btns">
+      <button class="btn btn-g" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-d" id="modal-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════════
+const GH_OWNER  = 'ford-innersource';
+const GH_REPO   = 'feature-strategy';
+const GH_BRANCH = 'sschaaf2_ford-patch-3';
+const GH_FILE   = 'data.json';
+const GH_API    = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
+const ADMIN_USERS = ['sschaaf2'];
+const EMBEDDED_READ_TOKEN = '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'; // your admin token here
+
+// ═══════════════════════════════════════════
+//  TOURNAMENT DATA
+// ═══════════════════════════════════════════
+const REGIONS = {
+  east:{ name:'East', emoji:'🔵', r1:[
+    {id:'m1',sA:1, tA:'Remote Start',          sB:16,tB:'Smart Hitch'},
+    {id:'m2',sA:8, tA:'BlueCruise',             sB:9, tB:'Trail Control'},
+    {id:'m3',sA:5, tA:'Android Auto',           sB:12,tB:'Multi-Access Tailgate'},
+    {id:'m4',sA:4, tA:'Selectable Drive Modes', sB:13,tB:'Vehicle Health Alert'},
+    {id:'m5',sA:6, tA:'Navigation Systems',     sB:11,tB:'Ambient Lighting'},
+    {id:'m6',sA:3, tA:'Surround View Cameras',  sB:14,tB:'Custom Drive Modes'},
+    {id:'m7',sA:7, tA:'Pro Power Onboard',      sB:10,tB:'911 Assist'},
+    {id:'m8',sA:2, tA:'CarPlay',                sB:15,tB:'Zone Lighting'},
+  ]},
+  west:{ name:'West', emoji:'🔴', r1:[
+    {id:'m1',sA:1, tA:'Seat Temperature Control',  sB:16,tB:'Rapid Launch'},
+    {id:'m2',sA:8, tA:'Pre-Collision Assist',        sB:9, tB:'WiFi Hotspot'},
+    {id:'m3',sA:5, tA:'Stolen Vehicle Services',     sB:12,tB:'Charge & Departure Scheduling'},
+    {id:'m4',sA:4, tA:'Power Running Boards',        sB:13,tB:'Forward Facing Spotlight'},
+    {id:'m5',sA:6, tA:'Telematics Data Collection',  sB:11,tB:'Trailer Profiles & Settings'},
+    {id:'m6',sA:3, tA:'Voice Recognition Systems',   sB:14,tB:'Rejuvenate'},
+    {id:'m7',sA:7, tA:'Police Dark Car',             sB:10,tB:'Trail 1-Pedal Driving'},
+    {id:'m8',sA:2, tA:'Heated Mirrors',              sB:15,tB:'Delivery Assist'},
+  ]},
+  south:{ name:'South', emoji:'🟢', r1:[
+    {id:'m1',sA:1, tA:'Fog Lights (Front)',  sB:16,tB:'Drift Brake'},
+    {id:'m2',sA:8, tA:'Secure Idle',         sB:9, tB:'Public Charging'},
+    {id:'m3',sA:5, tA:'Auto Vehicle Hold',   sB:12,tB:'Onboard Scales 2.0'},
+    {id:'m4',sA:4, tA:'Keypad Control',      sB:13,tB:'Active Exhaust Valve'},
+    {id:'m5',sA:6, tA:'Lincoln Embrace',     sB:11,tB:'Upfitter Suite'},
+    {id:'m6',sA:3, tA:'Walk Away Lock',      sB:14,tB:'Performance Shift Indicator'},
+    {id:'m7',sA:7, tA:'Multi-Contour Seat',  sB:10,tB:'Blind Spot Info System'},
+    {id:'m8',sA:2, tA:'Enhanced Memory',     sB:15,tB:'Trail Turn Assist'},
+  ]},
+  midwest:{ name:'Midwest', emoji:'🟡', r1:[
+    {id:'m1',sA:1, tA:'Power Moonroof & Shade',  sB:16,tB:'Tailgate Mode Audio'},
+    {id:'m2',sA:8, tA:'Driver Statistics Info',   sB:9, tB:'Auto Inhibit'},
+    {id:'m3',sA:5, tA:'Front Automatic Wiping',   sB:12,tB:'Start/Stop'},
+    {id:'m4',sA:4, tA:'Daytime Running Light',    sB:13,tB:'Zero Gravity Seat'},
+    {id:'m5',sA:6, tA:'Power Take Off (PTO)',     sB:11,tB:'Intelligent Backup Power'},
+    {id:'m6',sA:3, tA:'Super Reset',              sB:14,tB:'Power Telescoping Mirrors'},
+    {id:'m7',sA:7, tA:'Vehicle Start Inhibit',    sB:10,tB:'Trailer Light Check'},
+    {id:'m8',sA:2, tA:'First Row Seat Position',  sB:15,tB:'Off-Road Maps'},
+  ]}
+};
+
+const ALL_TEAMS=Object.entries(REGIONS).flatMap(([,r])=>
+  r.r1.flatMap(m=>[{name:m.tA,seed:m.sA,region:r.name,emoji:r.emoji},{name:m.tB,seed:m.sB,region:r.name,emoji:r.emoji}])
+);
+const REG_ROUNDS=['round1','round2','sweet16','elite8'];
+const REG_RND_NAME={round1:'Round 1',round2:'Round 2',sweet16:'Sweet 16',elite8:'Elite 8'};
+const ALL_RND_NAME={round1:'Round 1',round2:'Round 2',sweet16:'Sweet 16',elite8:'Elite 8',finalFour:'Final Four',championship:'Championship'};
+const RND_PTS={round1:1,round2:2,sweet16:4,elite8:8,finalFour:16,championship:32,championPick:64};
+const RC_CLASS_MAP={round1:'rc-r1',round2:'rc-r2',sweet16:'rc-s16',elite8:'rc-e8'};
+
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+let state=null, fileSHA=null, GH_TOKEN='', currentUser=null, userPicks={};
+
+// ═══════════════════════════════════════════
+//  TOKEN HELPERS
+//  The admin token is stored in localStorage
+//  under 'fm_admin_token'. All GitHub API
+//  calls use this single token. Regular users
+//  just need username/password — no token.
+// ═══════════════════════════════════════════
+function getAdminToken(){ return localStorage.getItem('fm_admin_token')||''; }
+function saveAdminToken(t){ localStorage.setItem('fm_admin_token',t); GH_TOKEN=t; }
+
+// ═══════════════════════════════════════════
+//  TOKEN SETUP MODAL (admin only)
+// ═══════════════════════════════════════════
+function openTokenSetup(){
+  document.getElementById('token-setup-input').value='';
+  document.getElementById('token-setup-error').style.display='none';
+  document.getElementById('token-setup').style.display='flex';
+  setTimeout(()=>document.getElementById('token-setup-input').focus(),100);
+}
+
+function skipTokenSetup(){
+  document.getElementById('token-setup').style.display='none';
+  updateTokenStatusBanner();
+}
+
+async function submitTokenSetup(){
+  const t=document.getElementById('token-setup-input').value.trim();
+  const errEl=document.getElementById('token-setup-error');
+  errEl.style.display='none';
+  if(!t){ errEl.textContent='Please enter a token.'; errEl.style.display='block'; return; }
+
+  GH_TOKEN=t;
+  try{
+    await getData();
+    saveAdminToken(t);
+    document.getElementById('token-setup').style.display='none';
+    updateTokenStatusBanner();
+    renderAll();
+    toast('GitHub connected! ✅','ok');
+  }catch(e){
+    errEl.textContent='❌ Connection failed. Check token & SSO authorization.';
+    errEl.style.display='block';
+    GH_TOKEN=getAdminToken(); // revert
+  }
+}
+
+function updateTokenStatusBanner(){
+  const el=document.getElementById('token-status-banner');
+  if(!el) return;
+  const hasToken=!!getAdminToken();
+  el.innerHTML=hasToken
+    ?'<div class="ibox ok" style="margin-bottom:14px;">✅ GitHub connected. Tournament controls active.</div>'
+    :'<div class="ibox warn" style="margin-bottom:14px;">⚠️ GitHub token not connected. Click <strong>Update GitHub Token</strong> below to enable tournament controls.</div>';
+}
+
+// ═══════════════════════════════════════════
+//  GITHUB API
+// ═══════════════════════════════════════════
+async function getData(){
+  // Use stored admin token if available, fall back to embedded read token
+  const readToken = GH_TOKEN || getAdminToken() || EMBEDDED_READ_TOKEN;
+  const res=await fetch(`${GH_API}?ref=${GH_BRANCH}&t=${Date.now()}`,{
+    headers:{'Authorization':`token ${readToken}`,'Accept':'application/vnd.github.v3+json'}
+  });
+  if(!res.ok) throw new Error(`GET ${res.status}`);
+  const json=await res.json();
+  fileSHA=json.sha;
+  state=JSON.parse(atob(json.content.replace(/\n/g,'')));
+}
+
+async function setData(data){
+  if(!GH_TOKEN){ toast('GitHub token not connected!','err'); return; }
+  const content=btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))));
+  const body={message:'Update tournament data',content,branch:GH_BRANCH};
+  if(fileSHA) body.sha=fileSHA;
+  const res=await fetch(GH_API,{
+    method:'PUT',
+    headers:{'Authorization':`token ${GH_TOKEN}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+    body:JSON.stringify(body)
+  });
+  if(!res.ok){ const e=await res.json(); throw new Error(`PUT ${res.status}: ${e.message}`); }
+  const result=await res.json();
+  fileSHA=result.content.sha;
+  state=data;
+}
+
+async function loadData(){
+  try{ await getData(); renderAll(); toast('Refreshed ✅','ok'); }
+  catch(e){ toast('Refresh failed: '+e.message,'err'); }
+}
+
+// ═══════════════════════════════════════════
+//  AUTH
+// ═══════════════════════════════════════════
+function switchAuthTab(tab){
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>{
+    t.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='register'));
+  });
+  document.getElementById('auth-login').classList.toggle('active',tab==='login');
+  document.getElementById('auth-register').classList.toggle('active',tab==='register');
+  document.getElementById('login-error').style.display='none';
+  document.getElementById('register-error').style.display='none';
+}
+
+async function doRegister(){
+  const displayName=document.getElementById('reg-displayname').value.trim();
+  const username=document.getElementById('reg-username').value.trim().toLowerCase();
+  const password=document.getElementById('reg-password').value;
+  const errEl=document.getElementById('register-error');
+  errEl.style.display='none';
+
+  if(!displayName||!username||!password){
+    errEl.textContent='❌ All fields are required.'; errEl.style.display='block'; return;
+  }
+  if(!/^[a-z0-9_]+$/.test(username)){
+    errEl.textContent='❌ Username: letters, numbers, underscores only.'; errEl.style.display='block'; return;
+  }
+
+  // Need a GitHub token to read/write data.json
+  GH_TOKEN=getAdminToken();
+  if(!GH_TOKEN){
+    // If this is an admin registering for the first time, they need a token first
+    if(ADMIN_USERS.includes(username)){
+      errEl.textContent=''; errEl.style.display='none';
+      setAuthLoading(false);
+      // Save partial info and open token setup
+      localStorage.setItem('fm_pending_reg', JSON.stringify({displayName, username, password}));
+      document.getElementById('auth-screen').classList.remove('open');
+      openTokenSetup();
+      return;
+    }
+    // Use embedded read token for registration reads
+    GH_TOKEN = EMBEDDED_READ_TOKEN;
+  }
+
+  setAuthLoading(true);
+  try{ await getData(); }catch(e){
+    setAuthLoading(false);
+    errEl.textContent='❌ Could not connect. Try again.'; errEl.style.display='block'; return;
+  }
+
+  if(!state.users) state.users={};
+  if(state.users[username]){
+    setAuthLoading(false);
+    errEl.textContent='❌ Username already taken. Choose another.'; errEl.style.display='block'; return;
+  }
+
+  const hash=await sha256(password);
+  state.users[username]={displayName, passwordHash:hash};
+
+  try{
+    await setData(state);
+    setAuthLoading(false);
+    finishLogin(username, displayName);
+  }catch(e){
+    setAuthLoading(false);
+    errEl.textContent='❌ Save failed: '+e.message; errEl.style.display='block';
+  }
+}
+
+async function doLogin(){
+  const username=document.getElementById('login-username').value.trim().toLowerCase();
+  const password=document.getElementById('login-password').value;
+  const errEl=document.getElementById('login-error');
+  errEl.style.display='none';
+
+  if(!username||!password){
+    errEl.textContent='❌ Enter username and password.'; errEl.style.display='block'; return;
+  }
+
+  // Use stored admin token for the GitHub read
+  GH_TOKEN=getAdminToken();
+
+  // Special case: admin logging in on a fresh device with no token sTtored
+  if(ADMIN_USERS.includes(username) && !GH_TOKEN){
+    // We can't verify the password without reading data.json
+    // So: store the pending login and prompt for token
+    localStorage.setItem('fm_pending_login', JSON.stringify({username, password}));
+    document.getElementById('auth-screen').classList.remove('open');
+    openTokenSetup();
+    return;
+  }
+
+  // Non-admin users don't need a stored token — embedded read token handles it
+  if(!GH_TOKEN && !ADMIN_USERS.includes(username)){
+    GH_TOKEN = ''; // will use EMBEDDED_READ_TOKEN in getData()
+  }
+
+  setAuthLoading(true);
+  try{ await getData(); }catch(e){
+    setAuthLoading(false);
+    errEl.textContent='❌ Connection error. Try again.'; errEl.style.display='block'; return;
+  }
+
+  const user=state.users?.[username];
+  if(!user){
+    setAuthLoading(false);
+    errEl.textContent='❌ Username not found. Please register first.'; errEl.style.display='block'; return;
+  }
+
+  const hash=await sha256(password);
+  if(hash!==user.passwordHash){
+    setAuthLoading(false);
+    errEl.textContent='❌ Incorrect password.'; errEl.style.display='block'; return;
+  }
+
+  setAuthLoading(false);
+  finishLogin(username, user.displayName);
+}
+
+function finishLogin(username, displayName){
+  const isAdmin=ADMIN_USERS.includes(username);
+  currentUser={username, displayName, isAdmin};
+  // Persist session (not token — token already in localStorage)
+  localStorage.setItem('fm_session', JSON.stringify({username, displayName}));
+
+  document.getElementById('auth-screen').classList.remove('open');
+  document.getElementById('user-chip').style.display='flex';
+  document.getElementById('user-chip-name').textContent=displayName;
+
+  // Always show admin tab for admin users
+  document.getElementById('admin-nav-btn').style.display=isAdmin?'':'none';
+
+  userPicks=JSON.parse(JSON.stringify(state?.picks?.[username]||{}));
+  renderAll();
+  toast(`Welcome, ${displayName}! 🏀`,'ok');
+
+  // If admin and no token yet, show token setup
+  if(isAdmin && !getAdminToken()){
+    setTimeout(openTokenSetup, 500);
+  }
+}
+
+function doLogout(){
+  currentUser=null; userPicks={};
+  localStorage.removeItem('fm_session');
+  localStorage.removeItem('fm_pending_login');
+  localStorage.removeItem('fm_pending_reg');
+  document.getElementById('auth-screen').classList.add('open');
+  document.getElementById('user-chip').style.display='none';
+  document.getElementById('admin-nav-btn').style.display='none';
+  document.getElementById('login-username').value='';
+  document.getElementById('login-password').value='';
+  document.getElementById('login-error').style.display='none';
+  switchAuthTab('login');
+}
+
+function setAuthLoading(show){
+  document.getElementById('auth-loading').style.display=show?'block':'none';
+  document.querySelectorAll('#auth-login input,#auth-login button,#auth-register input,#auth-register button')
+    .forEach(el=>el.disabled=show);
+}
+
+// Auto-login from stored session
+async function tryAutoLogin(){
+  const session=localStorage.getItem('fm_session');
+  if(!session) return false;
+  const {username, displayName}=JSON.parse(session);
+  GH_TOKEN=getAdminToken(); // may be empty for non-admin devices, that's OK
+  try{
+    await getData(); // getData now falls back to EMBEDDED_READ_TOKEN
+    if(!state.users?.[username]) return false;
+    finishLogin(username, displayName);
+    return true;
+  }catch(e){ return false; }
+}
+
+// Complete pending admin registration after token is entered
+async function completePendingAction(){
+  const pendingReg=localStorage.getItem('fm_pending_reg');
+  const pendingLogin=localStorage.getItem('fm_pending_login');
+
+  if(pendingReg){
+    localStorage.removeItem('fm_pending_reg');
+    const {displayName, username, password}=JSON.parse(pendingReg);
+    if(!state.users) state.users={};
+    if(!state.users[username]){
+      const hash=await sha256(password);
+      state.users[username]={displayName, passwordHash:hash};
+      await setData(state);
+    }
+    finishLogin(username, displayName);
+  } else if(pendingLogin){
+    localStorage.removeItem('fm_pending_login');
+    const {username, password}=JSON.parse(pendingLogin);
+    const user=state.users?.[username];
+    if(user){
+      const hash=await sha256(password);
+      if(hash===user.passwordHash){
+        finishLogin(username, user.displayName);
+        return;
+      }
+    }
+    // Password check failed — show auth screen again
+    document.getElementById('auth-screen').classList.add('open');
+    document.getElementById('login-error').textContent='❌ Incorrect password.';
+    document.getElementById('login-error').style.display='block';
+  }
+}
+
+async function sha256(str){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// ═══════════════════════════════════════════
+//  TOKEN SETUP — completion handler
+// ═══════════════════════════════════════════
+// Override submitTokenSetup to also handle pending actions
+const _origSubmit = submitTokenSetup;
+async function submitTokenSetup(){
+  const t=document.getElementById('token-setup-input').value.trim();
+  const errEl=document.getElementById('token-setup-error');
+  errEl.style.display='none';
+  if(!t){ errEl.textContent='Please enter a token.'; errEl.style.display='block'; return; }
+
+  GH_TOKEN=t;
+  try{
+    await getData();
+    saveAdminToken(t);
+    document.getElementById('token-setup').style.display='none';
+
+    // Handle pending registration or login
+    const hasPending=localStorage.getItem('fm_pending_reg')||localStorage.getItem('fm_pending_login');
+    if(hasPending){
+      await completePendingAction();
+    } else {
+      updateTokenStatusBanner();
+      renderAll();
+      toast('GitHub connected! ✅','ok');
+    }
+  }catch(e){
+    errEl.textContent='❌ Connection failed. Check token & SSO authorization.';
+    errEl.style.display='block';
+    GH_TOKEN=getAdminToken();
+  }
+}
+
+// ═══════════════════════════════════════════
+//  VOTES
+// ═══════════════════════════════════════════
+function getVotes(key,tA,tB){
+  let vA=0,vB=0;
+  for(const p of Object.values(state?.picks||{})){
+    if(p[key]===tA) vA++;
+    else if(p[key]===tB) vB++;
+  }
+  return {vA,vB,total:vA+vB};
+}
+function determineWinner(m,vA,vB,sA,sB){
+  if(vA>vB) return m.teamA;
+  if(vB>vA) return m.teamB;
+  return (sA&&sB&&sA<sB)?m.teamA:m.teamB;
+}
+function isRoundComplete(r){ return state?.meta?.roundStatus?.[r]==='complete'; }
+
+// ═══════════════════════════════════════════
+//  RENDER ALL
+// ═══════════════════════════════════════════
+function renderAll(){
+  if(!state) return;
+  renderStatusBar();
+  renderBracket();
+  if(currentUser?.isAdmin){
+    renderTournamentStatus();
+    updateTokenStatusBanner();
+    renderAdminTabs();
+  }
+  if(currentUser) renderPicksArea();
+}
+
+// ═══════════════════════════════════════════
+//  INITIALIZE
+// ═══════════════════════════════════════════
+async function initTournament(){
+  if(!GH_TOKEN){ toast('Connect GitHub token first!','err'); openTokenSetup(); return; }
+  const bkt={};
+  for(const [rk,r] of Object.entries(REGIONS)){
+    bkt[rk]={round1:{},round2:{},sweet16:{},elite8:{}};
+    for(const m of r.r1)
+      bkt[rk].round1[m.id]={id:m.id,seedA:m.sA,teamA:m.tA,seedB:m.sB,teamB:m.tB,winner:null};
+  }
+  bkt.finalFour={
+    sf1:{id:'sf1',label:'East vs South', seedA:null,teamA:null,seedB:null,teamB:null,winner:null},
+    sf2:{id:'sf2',label:'West vs Midwest',seedA:null,teamA:null,seedB:null,teamB:null,winner:null}
+  };
+  bkt.championship={seedA:null,teamA:null,seedB:null,teamB:null,winner:null};
+  const ns={
+    meta:{initialized:true,currentRound:'round1',
+      roundStatus:{round1:'active',round2:'pending',sweet16:'pending',elite8:'pending',finalFour:'pending',championship:'pending'}},
+    bracket:bkt, champion:null, picks:{}, scores:{}, users:state?.users||{}
+  };
+  try{
+    await setData(ns);
+    userPicks={};
+    renderAll();
+    toast('Tournament initialized! 🚀','ok');
+  }catch(e){ toast('Init failed: '+e.message,'err'); }
+}
+
+// ═══════════════════════════════════════════
+//  ADVANCE
+// ═══════════════════════════════════════════
+async function advanceRoundByVotes(){
+  if(!GH_TOKEN){ toast('Connect GitHub token first!','err'); openTokenSetup(); return; }
+  if(!state) return;
+  const cur=state.meta.currentRound;
+  const lines=[];
+
+  if(REG_ROUNDS.includes(cur)){
+    for(const [rk,r] of Object.entries(REGIONS)){
+      for(const m of Object.values(state.bracket[rk]?.[cur]||{})){
+        const {vA,vB}=getVotes(`${rk}_${cur}_${m.id}`,m.teamA,m.teamB);
+        const w=determineWinner(m,vA,vB,m.seedA,m.seedB);
+        lines.push(`${r.emoji} ${vA===vB?'TIE→':''}${w} (${m.teamA} ${vA}v${vB} ${m.teamB})`);
+      }
+    }
+  } else if(cur==='finalFour'){
+    for(const g of Object.values(state.bracket.finalFour||{})){
+      const {vA,vB}=getVotes(`finalFour_${g.id}`,g.teamA,g.teamB);
+      lines.push(`${determineWinner(g,vA,vB,g.seedA,g.seedB)} (${g.teamA} ${vA}v${vB} ${g.teamB})`);
+    }
+  } else if(cur==='championship'){
+    const ch=state.bracket.championship;
+    const {vA,vB}=getVotes('championship',ch.teamA,ch.teamB);
+    lines.push(`🏆 ${determineWinner(ch,vA,vB,ch.seedA,ch.seedB)}`);
+  }
+
+  openModal(`⏭️ Advance: ${ALL_RND_NAME[cur]}`,
+    `Projected winners:\n\n${lines.join('\n')}\n\nConfirm to lock results and advance.`,
+    ()=>doAdvance(cur));
+}
+
+async function doAdvance(cur){
+  if(REG_ROUNDS.includes(cur)){
+    for(const [rk] of Object.entries(REGIONS)){
+      for(const m of Object.values(state.bracket[rk]?.[cur]||{})){
+        const {vA,vB}=getVotes(`${rk}_${cur}_${m.id}`,m.teamA,m.teamB);
+        m.winner=determineWinner(m,vA,vB,m.seedA,m.seedB);
+      }
+    }
+    state.meta.roundStatus[cur]='complete';
+    const next=nextRound(cur);
+    if(next==='finalFour'){
+      const rw={};
+      for(const [rk] of Object.entries(REGIONS))
+        rw[rk]=Object.values(state.bracket[rk].elite8||{})[0]?.winner||null;
+      state.bracket.finalFour.sf1.teamA=rw.east; state.bracket.finalFour.sf1.teamB=rw.south;
+      state.bracket.finalFour.sf2.teamA=rw.west; state.bracket.finalFour.sf2.teamB=rw.midwest;
+    } else {
+      for(const [rk] of Object.entries(REGIONS)){
+        const cms=Object.values(state.bracket[rk][cur]);
+        const nm={};
+        for(let i=0;i<cms.length;i+=2){
+          const id=`m${i/2+1}`;
+          nm[id]={id,seedA:cms[i].seedA,teamA:cms[i].winner,seedB:cms[i+1].seedA,teamB:cms[i+1].winner,winner:null};
+        }
+        state.bracket[rk][next]=nm;
+      }
+    }
+    state.meta.currentRound=next;
+    state.meta.roundStatus[next]='active';
+  } else if(cur==='finalFour'){
+    const sf1=state.bracket.finalFour.sf1, sf2=state.bracket.finalFour.sf2;
+    const {vA:v1A,vB:v1B}=getVotes('finalFour_sf1',sf1.teamA,sf1.teamB);
+    const {vA:v2A,vB:v2B}=getVotes('finalFour_sf2',sf2.teamA,sf2.teamB);
+    sf1.winner=determineWinner(sf1,v1A,v1B,sf1.seedA,sf1.seedB);
+    sf2.winner=determineWinner(sf2,v2A,v2B,sf2.seedA,sf2.seedB);
+    state.meta.roundStatus.finalFour='complete';
+    state.bracket.championship.teamA=sf1.winner;
+    state.bracket.championship.teamB=sf2.winner;
+    state.meta.currentRound='championship';
+    state.meta.roundStatus.championship='active';
+  } else if(cur==='championship'){
+    const ch=state.bracket.championship;
+    const {vA,vB}=getVotes('championship',ch.teamA,ch.teamB);
+    ch.winner=determineWinner(ch,vA,vB,ch.seedA,ch.seedB);
+    state.champion=ch.winner; state.meta.roundStatus.championship='complete';
+  }
+  calculateScores();
+  try{
+    await setData(state); renderAll();
+    toast(`✅ Advanced to ${ALL_RND_NAME[state.meta.currentRound]||'Complete'}!`,'ok');
+  }catch(e){ toast('Advance failed: '+e.message,'err'); }
+}
+
+function nextRound(cur){
+  const o=['round1','round2','sweet16','elite8','finalFour','championship'];
+  return o[o.indexOf(cur)+1];
+}
+
+// ═══════════════════════════════════════════
+//  STATUS BAR
+// ═══════════════════════════════════════════
+function renderStatusBar(){
+  if(!state) return;
+  document.getElementById('status-bar').innerHTML=
+    Object.entries(ALL_RND_NAME).map(([k,v])=>{
+      const s=state.meta?.roundStatus?.[k]||'pending';
+      return `<span class="sp ${s==='active'?'active':s==='complete'?'complete':''}">${v}</span>`;
+    }).join('');
+}
+
+// ═══════════════════════════════════════════
+//  BRACKET
+// ═══════════════════════════════════════════
+function renderBracket(){
+  const w=document.getElementById('bracket-wrapper');
+  if(!state?.bracket||!state.meta?.initialized){
+    w.innerHTML='<div class="loading" style="padding:60px;"><p style="color:#5a80a0;font-size:0.9rem;">⏳ Tournament not yet initialized.<br>Admin will start the bracket shortly!</p></div>';
+    return;
+  }
+  w.innerHTML=
+    buildHalf('left', ['east','south'],  state.bracket)+
+    buildCenter(state.bracket)+
+    buildHalf('right',['west','midwest'],state.bracket);
+}
+
+function buildHalf(side,keys,bkt){
+  return `<div class="bracket-half ${side}">`+
+    keys.map((rk,i)=>(i>0?'<div class="region-divider"></div>':'')+buildRegionBlock(rk,bkt[rk],side==='right')).join('')+
+  `</div>`;
+}
+
+function buildRegionBlock(rk,rd,mirrored){
+  if(!rd) return '';
+  // Right bracket: E8 is leftmost (innermost, near center), R1 is rightmost (outer)
+  const rounds=REG_ROUNDS;
+  const cols=rounds.map((round,colIdx)=>{
+    const ms=Object.values(rd[round]||{});
+    const showVotes=isRoundComplete(round);
+    // For right bracket: pair connectors attach on RIGHT side of each column
+    // outermost column = the one with no further rounds to connect to
+    // left bracket  → outermost = elite8 (last col, no right connector needed)
+    // right bracket → outermost = elite8 (first col rendered = leftmost = closest to center, no left connector needed)
+    const isE8=round==='elite8';
+    return `<div class="round-col ${RC_CLASS_MAP[round]}">
+      <div class="round-title">${REG_RND_NAME[round]}</div>
+      <div class="round-games">${ms.map((m,i)=>buildSlot(rk,round,m,i,showVotes,mirrored,isE8)).join('')}</div>
+    </div>`;
+  }).join('');
+  const lbl=`<div class="region-label rl-${rk}">${REGIONS[rk].emoji} ${REGIONS[rk].name}</div>`;
+  return `<div class="region-block">${mirrored?cols+lbl:lbl+cols}</div>`;
+}
+
+function buildSlot(rk,round,m,mi,showVotes,mirrored,isOutermost){
+  const pairCls=isOutermost?'':(mi%2===0?'pair-top':'pair-bottom');
+  const key=`${rk}_${round}_${m.id}`;
+  const {vA,vB,total}=showVotes?getVotes(key,m.teamA,m.teamB):{vA:0,vB:0,total:0};
+  const pA=total>0?Math.round(vA/total*100):50, pB=100-pA;
+
+  // Current user's pick for this matchup
+  const userPick = userPicks[key];
+
+  if(!m.teamA&&!m.teamB) return `<div class="game-slot ${pairCls}">
+    <div class="bkt-matchup">
+      <div class="bkt-team tbd"><div class="bkt-team-content"><span class="tn">TBD</span></div></div>
+      <div class="bkt-team tbd"><div class="bkt-team-content"><span class="tn">TBD</span></div></div>
+    </div></div>`;
+
+  const aW=m.winner===m.teamA, bW=m.winner===m.teamB;
+
+  // Determine pick correctness (only relevant if round is complete)
+  const roundDone = isRoundComplete(round);
+  const aPickClass = getPickClass(m.teamA, userPick, m.winner, roundDone);
+  const bPickClass = getPickClass(m.teamB, userPick, m.winner, roundDone);
+  const aDot = getPickDot(m.teamA, userPick, m.winner, roundDone);
+  const bDot = getPickDot(m.teamB, userPick, m.winner, roundDone);
+
+  return `<div class="game-slot ${pairCls}">
+    <div class="bkt-matchup ${m.winner?'done':''}">
+      <div class="bkt-team ${m.winner?(aW?'winner':'loser'):''} ${aPickClass}">
+        ${showVotes?`<div class="vote-bar" style="width:${pA}%"></div>`:''}
+        <div class="bkt-team-content">
+          ${m.seedA?`<span class="sn">${m.seedA}</span>`:''}
+          <span class="tn">${m.teamA}</span>
+          ${aDot}
+          ${showVotes&&total>0?`<span class="vote-pct">${vA}</span>`:''}
+          ${aW?'🏆':''}
+        </div>
+      </div>
+      <div class="bkt-team ${m.winner?(bW?'winner':'loser'):''} ${bPickClass}">
+        ${showVotes?`<div class="vote-bar" style="width:${pB}%"></div>`:''}
+        <div class="bkt-team-content">
+          ${m.seedB?`<span class="sn">${m.seedB}</span>`:''}
+          <span class="tn">${m.teamB}</span>
+          ${bDot}
+          ${showVotes&&total>0?`<span class="vote-pct">${vB}</span>`:''}
+          ${bW?'🏆':''}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// Returns CSS class for pick correctness on a team row
+function getPickClass(team, userPick, winner, roundDone){
+  if(!userPick || userPick !== team) return '';       // user didn't pick this team
+  if(!roundDone) return '';                            // round not done yet, no highlight
+  return winner === team ? 'pick-correct' : 'pick-incorrect';
+}
+
+// Returns a colored dot if user picked this team
+function getPickDot(team, userPick, winner, roundDone){
+  if(!userPick || userPick !== team) return '';
+  if(!roundDone) return '<span class="pick-dot" style="background:#003478;" title="Your pick"></span>';
+  return winner === team
+    ? '<span class="pick-dot correct" title="Correct pick!"></span>'
+    : '<span class="pick-dot incorrect" title="Incorrect pick"></span>';
+}
+
+function buildCenter(bkt){
+  const ff=bkt.finalFour||{},ch=bkt.championship||{};
+  const sf1=ff.sf1||{},sf2=ff.sf2||{};
+  const ffD=isRoundComplete('finalFour'), chD=isRoundComplete('championship');
+  const {vA:s1A,vB:s1B}=ffD?getVotes('finalFour_sf1',sf1.teamA,sf1.teamB):{vA:0,vB:0};
+  const {vA:s2A,vB:s2B}=ffD?getVotes('finalFour_sf2',sf2.teamA,sf2.teamB):{vA:0,vB:0};
+  const {vA:cA, vB:cB} =chD?getVotes('championship',ch.teamA,ch.teamB):{vA:0,vB:0};
+
+  const ft=(team, winner, votes, showVotes, pickKey)=>{
+    if(!team) return `<div class="ff-team tbd">TBD</div>`;
+    const userPick = userPicks[pickKey];
+    const roundDone = showVotes; // showVotes === round is complete
+    const dot = getPickDot(team, userPick, winner, roundDone);
+    const pickCls = getPickClass(team, userPick, winner, roundDone);
+    return `<div class="ff-team ${winner===team?'winner':''} ${pickCls}">
+      ${winner===team?'🏆 ':''}${team}
+      ${dot}
+      ${showVotes&&votes>0?`<span style="color:#ff6600;font-size:0.6rem;">(${votes})</span>`:''}
+    </div>`;
+  };
+
+  const champ=state.champion
+    ?`<div class="champ-box"><span class="champ-trophy">🏆</span><span class="champ-lbl">Champion</span><div class="champ-name">${state.champion}</div></div>`
+    :`<div class="champ-box"><span class="champ-trophy">🏀</span><span class="champ-lbl">Championship</span>
+       <div style="margin-top:6px;">
+         ${ft(ch.teamA,ch.winner,cA,chD,'championship')}
+         ${ft(ch.teamB,ch.winner,cB,chD,'championship')}
+       </div></div>`;
+
+  return `<div class="bracket-center">
+    <div class="ff-box"><span class="ff-lbl">🔵 East vs 🟢 South</span>
+      ${ft(sf1.teamA,sf1.winner,s1A,ffD,'finalFour_sf1')}
+      ${ft(sf1.teamB,sf1.winner,s1B,ffD,'finalFour_sf1')}
+    </div>
+    ${champ}
+    <div class="ff-box"><span class="ff-lbl">🔴 West vs 🟡 Midwest</span>
+      ${ft(sf2.teamA,sf2.winner,s2A,ffD,'finalFour_sf2')}
+      ${ft(sf2.teamB,sf2.winner,s2B,ffD,'finalFour_sf2')}
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════
+//  ADMIN
+// ═══════════════════════════════════════════
+let adminTab='east';
+
+function renderTournamentStatus(){
+  const el=document.getElementById('tournament-status');
+  if(!el||!state) return;
+  const cur=state.meta?.currentRound;
+  const n=Object.keys(state.picks||{}).length;
+  el.innerHTML=`<div class="ibox">
+    <strong>Status:</strong> ${state.meta?.initialized?'✅ Initialized':'⚠️ Not initialized'}<br>
+    <strong>Current Round:</strong> ${ALL_RND_NAME[cur]||cur||'—'}<br>
+    <strong>Participants submitted:</strong> ${n}<br>
+    <strong>Champion:</strong> ${state.champion||'Not yet crowned'}
+  </div>`;
+}
+
+function renderAdminTabs(){
+  if(!state) return;
+  const cur=state.meta?.currentRound||'round1';
+  const el=document.getElementById('admin-region-tabs');
+  if(!el) return;
+  el.innerHTML=REG_ROUNDS.includes(cur)
+    ?Object.entries(REGIONS).map(([rk,r])=>`<button class="rtab ${adminTab===rk?'active':''}" onclick="switchAdminTab('${rk}')">${r.emoji} ${r.name}</button>`).join('')
+    :`<button class="rtab active">${cur==='finalFour'?'🏀 Final Four':'🏆 Championship'}</button>`;
+  renderAdminMatchups();
+}
+
+function switchAdminTab(rk){ adminTab=rk; renderAdminTabs(); }
+
+function renderAdminMatchups(){
+  if(!state) return;
+  const cur=state.meta?.currentRound||'round1';
+  const el=document.getElementById('admin-matchups');
+  if(!el) return;
+
+  if(!state.meta?.initialized){
+    el.innerHTML='<div class="ibox warn" style="grid-column:1/-1;">⚠️ Tournament not initialized. Click <strong>🚀 Initialize</strong> above to set up the bracket.</div>';
+    return;
+  }
+
+  let ms=[], pkFn;
+  if(REG_ROUNDS.includes(cur)){
+    ms=Object.values(state.bracket[adminTab]?.[cur]||{});
+    pkFn=(m)=>`${adminTab}_${cur}_${m.id}`;
+    if(!ms.length){ el.innerHTML='<div class="ibox warn">No matchups found.</div>'; return; }
+  } else if(cur==='finalFour'){
+    ms=Object.values(state.bracket.finalFour||{});
+    pkFn=(m)=>`finalFour_${m.id}`;
+  } else {
+    const ch=state.bracket.championship||{};
+    ms=[{id:'ch',teamA:ch.teamA,teamB:ch.teamB,winner:ch.winner,seedA:ch.seedA,seedB:ch.seedB}];
+    pkFn=()=>'championship';
+  }
+
+  el.innerHTML=ms.map((m,i)=>{
+    const pk=pkFn(m);
+    const {vA,vB,total}=getVotes(pk,m.teamA,m.teamB);
+    const pA=total>0?Math.round(vA/total*100):0, pB=100-pA;
+    const proj=total>0?determineWinner(m,vA,vB,m.seedA,m.seedB):null;
+    const tied=vA===vB&&total>0;
+    const lA=vA>vB, lB=vB>vA;
+    const title=REG_ROUNDS.includes(cur)
+      ?`${REGIONS[adminTab].emoji} ${REGIONS[adminTab].name} — Match ${i+1}`
+      :(m.label||'🏆 Championship');
+    return `<div class="card">
+      <h4>${title}</h4>
+      ${m.winner?`<div class="ibox ok" style="margin:0 0 8px;font-size:0.78rem;">✅ Locked: <strong>${m.winner}</strong></div>`:''}
+      <div class="admin-vote-bar">
+        <div class="projected-lbl">🗳️ ${total} vote${total!==1?'s':''}</div>
+        <div class="avb-row">
+          <span class="avb-name">${m.teamA||'TBD'}${m.seedA?` (${m.seedA})`:''}</span>
+          <span class="avb-cnt">${vA}</span>
+          <div class="avb-track"><div class="avb-fill ${lA?'lead':''}" style="width:${pA}%"></div></div>
+          <span style="font-size:0.7rem;color:#5a80a0;min-width:28px;">${pA}%</span>
+        </div>
+        <div class="avb-row">
+          <span class="avb-name">${m.teamB||'TBD'}${m.seedB?` (${m.seedB})`:''}</span>
+          <span class="avb-cnt">${vB}</span>
+          <div class="avb-track"><div class="avb-fill ${lB?'lead':''}" style="width:${pB}%"></div></div>
+          <span style="font-size:0.7rem;color:#5a80a0;min-width:28px;">${pB}%</span>
+        </div>
+        ${proj&&!m.winner?`<div class="${tied?'tie-warning':'projected-winner'}">${tied?`⚠️ TIE → ${proj} (higher seed)`:`→ Projected: ${proj}`}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+//  PICKS
+// ═══════════════════════════════════════════
+function getRequiredKeys(){
+  if(!state) return [];
+  const cur=state.meta?.currentRound, keys=[];
+  if(cur==='round1') keys.push('championPick');
+  if(REG_ROUNDS.includes(cur))
+    for(const rk of Object.keys(REGIONS))
+      for(const m of Object.values(state.bracket[rk]?.[cur]||{}))
+        keys.push(`${rk}_${cur}_${m.id}`);
+  else if(cur==='finalFour')
+    for(const g of Object.values(state.bracket.finalFour||{})) keys.push(`finalFour_${g.id}`);
+  else if(cur==='championship') keys.push('championship');
+  return keys;
+}
+
+function renderPicksArea(){
+  if(!currentUser||!state) return;
+  const area=document.getElementById('picks-area');
+
+  if(!state.meta?.initialized){
+    area.innerHTML='<div class="panel"><div class="ibox warn">⏳ The tournament hasn\'t started yet! The admin will initialize the bracket shortly. Check back soon.</div></div>';
+    return;
+  }
+
+  const cur=state.meta?.currentRound;
+  let html='';
+
+  // Champion pick — Round 1 only
+  if(cur==='round1'){
+    const sel=userPicks.championPick||null;
+    html+=`<div class="panel">
+      <h2>🏆 Predict the Champion <span style="color:#5a80a0;font-size:0.78rem;font-weight:400;">(64 pts!)</span></h2>
+      <div class="ibox ${sel?'ok':'warn'}">${sel?`✅ Your pick: <strong>${sel}</strong>`:'⚠️ Required — pick your overall champion before saving.'}</div>
+      <div class="cp-grid">${ALL_TEAMS.slice().sort((a,b)=>a.seed-b.seed).map(t=>
+        `<button class="cp-btn ${sel===t.name?'sel':''}" onclick="pickChampion('${esc(t.name)}')">
+          <span class="seed-tag">${t.seed}</span><br>${t.name}
+          <span class="region-tag">${t.emoji} ${t.region}</span>
+        </button>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  if(REG_ROUNDS.includes(cur)){
+    for(const [rk,r] of Object.entries(REGIONS)){
+      const ms=Object.values(state.bracket[rk]?.[cur]||{});
+      if(!ms.length) continue;
+      html+=`<div class="panel"><h2>${r.emoji} ${r.name} Region</h2><div class="grid-cards">`+
+        ms.map((m,i)=>{
+          const key=`${rk}_${cur}_${m.id}`, pick=userPicks[key];
+          return `<div class="card" id="card-${key}">
+            <h4>${r.emoji} ${r.name} — Match ${i+1}</h4>
+            ${!pick?'<div style="font-size:0.72rem;color:#c0392b;margin-bottom:5px;font-weight:600;">⚠️ Pick required</div>':''}
+            <div class="row2">
+              <button class="pbtn ${pick===m.teamA?'sel':''}" onclick="pickTeam('${key}','${esc(m.teamA)}')">
+                ${m.seedA?`(${m.seedA}) `:''}${m.teamA}
+              </button>
+              <span class="vs-lbl">VS</span>
+              <button class="pbtn ${pick===m.teamB?'sel':''}" onclick="pickTeam('${key}','${esc(m.teamB)}')">
+                ${m.seedB?`(${m.seedB}) `:''}${m.teamB}
+              </button>
+            </div>
+            ${pick?`<div style="font-size:0.72rem;color:#1a7a4a;font-weight:600;">✅ ${pick}</div>`:''}
+          </div>`;
+        }).join('')+
+      `</div></div>`;
+    }
+  } else if(cur==='finalFour'){
+    html+=`<div class="panel"><h2>🏀 Final Four</h2><div class="grid-cards">`+
+      Object.values(state.bracket.finalFour||{}).map(g=>{
+        const key=`finalFour_${g.id}`, pick=userPicks[key];
+        return `<div class="card" id="card-${key}">
+          <h4>${g.label}</h4>
+          ${!pick?'<div style="font-size:0.72rem;color:#c0392b;margin-bottom:5px;font-weight:600;">⚠️ Pick required</div>':''}
+          <div class="row2">
+            <button class="pbtn ${pick===g.teamA?'sel':''}" onclick="pickTeam('${key}','${esc(g.teamA||'')}')">
+              ${g.teamA||'TBD'}
+            </button>
+            <span class="vs-lbl">VS</span>
+            <button class="pbtn ${pick===g.teamB?'sel':''}" onclick="pickTeam('${key}','${esc(g.teamB||'')}')">
+              ${g.teamB||'TBD'}
+            </button>
+          </div>
+          ${pick?`<div style="font-size:0.72rem;color:#1a7a4a;font-weight:600;">✅ ${pick}</div>`:''}
+        </div>`;
+      }).join('')+`</div></div>`;
+  } else if(cur==='championship'){
+    const ch=state.bracket.championship||{}, pick=userPicks.championship;
+    html+=`<div class="panel"><h2>🏆 Championship</h2><div class="grid-cards">
+      <div class="card" id="card-championship">
+        <h4>National Championship</h4>
+        ${!pick?'<div style="font-size:0.72rem;color:#c0392b;margin-bottom:5px;font-weight:600;">⚠️ Pick required</div>':''}
+        <div class="row2">
+          <button class="pbtn ${pick===ch.teamA?'sel':''}" onclick="pickTeam('championship','${esc(ch.teamA||'')}')">
+            ${ch.teamA||'TBD'}
+          </button>
+          <span class="vs-lbl">VS</span>
+          <button class="pbtn ${pick===ch.teamB?'sel':''}" onclick="pickTeam('championship','${esc(ch.teamB||'')}')">
+            ${ch.teamB||'TBD'}
+          </button>
+        </div>
+        ${pick?`<div style="font-size:0.72rem;color:#1a7a4a;font-weight:600;">✅ ${pick}</div>`:''}
+      </div>
+    </div></div>`;
+  }
+
+  html+=`<div style="margin-top:4px;padding-bottom:28px;">
+    <button class="btn btn-s" onclick="submitPicks()" style="min-width:180px;">💾 Save All Picks</button>
+  </div>`;
+  area.innerHTML=html;
+}
+
+function esc(s){ return (s||'').replace(/'/g,"\\'"); }
+function pickChampion(n){ userPicks.championPick=n; renderPicksArea(); document.getElementById('validation-banner').classList.remove('show'); }
+function pickTeam(k,t){ userPicks[k]=t; renderPicksArea(); document.getElementById('validation-banner').classList.remove('show'); }
+
+async function submitPicks(){
+  if(!currentUser){ toast('Not signed in!','err'); return; }
+  const missing=getRequiredKeys().filter(k=>!userPicks[k]);
+  if(missing.length){
+    const b=document.getElementById('validation-banner');
+    b.textContent=`⚠️ ${missing.length} pick${missing.length!==1?'s':''} missing! Select a winner for every matchup before saving.`;
+    b.classList.add('show');
+    b.scrollIntoView({behavior:'smooth',block:'center'});
+    toast(`${missing.length} pick${missing.length!==1?'s':''} still needed!`,'err'); return;
+  }
+  document.getElementById('validation-banner').classList.remove('show');
+  if(!state.picks) state.picks={};
+  state.picks[currentUser.username]={...userPicks, _displayName:currentUser.displayName};
+  calculateScores();
+  try{ await setData(state); toast('Picks saved! 🎉','ok'); }
+  catch(e){ toast('Save failed: '+e.message,'err'); }
+}
+
+// ═══════════════════════════════════════════
+//  SCORING
+// ═══════════════════════════════════════════
+function calculateScores(){
+  if(!state.picks) return;
+  const scores={};
+  for(const [uname,picks] of Object.entries(state.picks)){
+    let s=0;
+    for(const rk of Object.keys(REGIONS))
+      for(const round of REG_ROUNDS)
+        for(const m of Object.values(state.bracket[rk]?.[round]||{}))
+          if(m.winner&&picks[`${rk}_${round}_${m.id}`]===m.winner) s+=RND_PTS[round];
+    for(const g of Object.values(state.bracket.finalFour||{}))
+      if(g.winner&&picks[`finalFour_${g.id}`]===g.winner) s+=RND_PTS.finalFour;
+    const ch=state.bracket.championship||{};
+    if(ch.winner&&picks.championship===ch.winner) s+=RND_PTS.championship;
+    if(state.champion&&picks.championPick===state.champion) s+=RND_PTS.championPick;
+    scores[uname]=s;
+  }
+  state.scores=scores;
+}
+
+// ═══════════════════════════════════════════
+//  LEADERBOARD
+// ═══════════════════════════════════════════
+async function loadLeaderboard(){
+  if(!state) return;
+  calculateScores();
+  const sorted=Object.entries(state.scores||{}).sort((a,b)=>b[1]-a[1]);
+  const el=document.getElementById('leaderboard-area');
+  if(!sorted.length){ el.innerHTML='<div class="ibox">No picks submitted yet!</div>'; return; }
+  el.innerHTML=`<table class="lb-table">
+    <thead><tr><th>Rank</th><th>Name</th><th>Points</th><th>Champion Pick</th></tr></thead>
+    <tbody>${sorted.map(([uname,score],i)=>{
+      const rank=i+1, cls=rank===1?'rb1':rank===2?'rb2':rank===3?'rb3':'rbo';
+      const p=state.picks?.[uname]||{};
+      const dn=p._displayName||uname, cp=p.championPick||'—', ok=state.champion&&cp===state.champion;
+      return `<tr><td><span class="rank-b ${cls}">${rank}</span></td>
+        <td><strong>${dn}</strong></td>
+        <td><strong style="color:#ff6600;">${score}</strong> pts</td>
+        <td>${cp}${ok?' ✅':''}</td></tr>`;
+    }).join('')}</tbody></table>`;
+}
+
+// ═══════════════════════════════════════════
+//  RESET
+// ═══════════════════════════════════════════
+function confirmReset(){
+  openModal('⚠️ Reset Everything',
+    'This erases ALL results, picks and scores. User accounts are preserved. Cannot be undone!',
+    async()=>{
+      const ns={
+        meta:{initialized:false,currentRound:'round1',
+          roundStatus:{round1:'pending',round2:'pending',sweet16:'pending',elite8:'pending',finalFour:'pending',championship:'pending'}},
+        bracket:{
+          east:{round1:{},round2:{},sweet16:{},elite8:{}}, west:{round1:{},round2:{},sweet16:{},elite8:{}},
+          south:{round1:{},round2:{},sweet16:{},elite8:{}}, midwest:{round1:{},round2:{},sweet16:{},elite8:{}},
+          finalFour:{sf1:{id:'sf1',label:'East vs South',teamA:null,teamB:null,winner:null},
+                     sf2:{id:'sf2',label:'West vs Midwest',teamA:null,teamB:null,winner:null}},
+          championship:{teamA:null,teamB:null,winner:null}
+        },
+        champion:null, picks:{}, scores:{}, users:state?.users||{}
+      };
+      try{ await setData(ns); userPicks={}; renderAll(); toast('Reset complete.','ok'); }
+      catch(e){ toast('Reset failed: '+e.message,'err'); }
+    }
+  );
+}
+
+// ═══════════════════════════════════════════
+//  UI HELPERS
+// ═══════════════════════════════════════════
+function showPage(id,e){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(`page-${id}`).classList.add('active');
+  if(e?.currentTarget) e.currentTarget.classList.add('active');
+  if(id==='leaderboard') loadLeaderboard();
+  if(id==='admin'){ renderTournamentStatus(); updateTokenStatusBanner(); renderAdminTabs(); }
+  if(id==='bracket'){ renderStatusBar(); renderBracket(); }
+  if(id==='picks'&&currentUser) renderPicksArea();
+}
+
+let toastT;
+function toast(msg,type=''){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.className=`show ${type}`;
+  clearTimeout(toastT); toastT=setTimeout(()=>el.className='',3500);
+}
+
+let modalCb=null;
+function openModal(title,body,cb){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-body').textContent=body;
+  document.getElementById('modal').classList.add('open');
+  modalCb=cb;
+  document.getElementById('modal-ok').onclick=()=>{ closeModal(); modalCb&&modalCb(); };
+}
+function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+
+// ═══════════════════════════════════════════
+//  BOOT
+// ═══════════════════════════════════════════
+(async()=>{
+  const ok=await tryAutoLogin();
+  if(!ok){
+    // Pre-fill username if we have a previous session
+    try{
+      const s=localStorage.getItem('fm_session');
+      if(s) document.getElementById('login-username').value=JSON.parse(s).username;
+    }catch(e){}
+  }
+})();
+</script>
+</body>
+</html>
+
+
+
+
+
