@@ -338,11 +338,9 @@
 
 <script>
 // ═══════════════════════════════════════════
-//  CONFIG — replace these two values!
+//  CONFIG 
 // ═══════════════════════════════════════════
-const JSONBIN_BIN_ID  = '69b2ca56c3097a1dd51c93a7';
-const JSONBIN_API_KEY = '$2a$10$qM9yemww4VePOrZqpMkBCuMsO05u6pXhEdMYBFbSx4jTfjc7bz8Tm';
-const JSONBIN_API     = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+const FIREBASE_URL = 'https://feature-madness-default-rtdb.firebaseio.com';
 const ADMIN_USERS     = ['sschaaf2'];
 
 // ═══════════════════════════════════════════
@@ -409,28 +407,20 @@ let state=null, currentUser=null, userPicks={};
 //  JSONBIN API
 // ═══════════════════════════════════════════
 async function getData(){
-  const res = await fetch(`${JSONBIN_API}/latest`, {
-    headers: {
-      'X-Access-Key': JSONBIN_API_KEY,  // changed from X-Master-Key
-      'X-Bin-Meta': 'false'
-    }
-  });
+  const res = await fetch(`${FIREBASE_URL}/data.json`);
   if(!res.ok) throw new Error(`GET ${res.status}`);
-  state = await res.json();
+  const json = await res.json();
+  state = json || { meta:{initialized:false}, bracket:{}, champion:null, picks:{}, scores:{}, users:{} };
 }
 
 async function setData(data){
-  const res = await fetch(JSONBIN_API, {
+  const res = await fetch(`${FIREBASE_URL}/data.json`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Access-Key': JSONBIN_API_KEY   // changed from X-Master-Key
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   });
-  if(!res.ok){ const e = await res.json(); throw new Error(`PUT ${res.status}: ${e.message||'unknown'}`); }
-  const result = await res.json();
-  state = result.record;
+  if(!res.ok) throw new Error(`PUT ${res.status}`);
+  state = data;
 }
 
 async function loadData(){
