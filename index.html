@@ -1107,22 +1107,142 @@ function calculateScores(){
 async function loadLeaderboard(){
   if(!state) return;
   calculateScores();
-  const sorted=Object.entries(state.scores||{}).sort((a,b)=>b[1]-a[1]);
-  const el=document.getElementById('leaderboard-area');
-  if(!sorted.length){ el.innerHTML='<div class="ibox">No picks submitted yet!</div>'; return; }
-  el.innerHTML=`<table class="lb-table">
-    <thead><tr><th>Rank</th><th>Name</th><th>Points</th><th>Champion Pick</th></tr></thead>
-    <tbody>${sorted.map(([uname,score],i)=>{
-      const rank=i+1,cls=rank===1?'rb1':rank===2?'rb2':rank===3?'rb3':'rbo';
-      const p=state.picks?.[uname]||{};
-      const dn=p._displayName||uname,cp=p.championPick||'—',ok=state.champion&&cp===state.champion;
-      return `<tr><td><span class="rank-b ${cls}">${rank}</span></td>
-        <td><strong>${dn}</strong></td>
-        <td><strong style="color:#ff6600;">${score}</strong> pts</td>
-        <td>${cp}${ok?' ✅':''}</td></tr>`;
-    }).join('')}</tbody></table>`;
-}
 
+  const allUsers = Object.entries(state.users || {});
+  if(!allUsers.length){
+    document.getElementById('leaderboard-area').innerHTML = '<div class="ibox">No users registered yet!</div>';
+    return;
+  }
+
+  const cur = state.meta?.currentRound || 'round1';
+  const rounds = ['round1','round2','sweet16','elite8','finalFour','championship'];
+  const roundNames = {
+    round1:'R1', round2:'R2', sweet16:'S16',
+    elite8:'E8', finalFour:'FF', championship:'🏆'
+  };
+
+  // Figure out which rounds are active or complete (worth showing)
+  const relevantRounds = rounds.filter(r =>
+    state.meta?.roundStatus?.[r] === 'active' ||
+    state.meta?.roundStatus?.[r] === 'complete'
+  );
+
+  // For each user, check if they have picks for each relevant round
+  function hasPicksForRound(username, round){
+    const picks = state.picks?.[username];
+    if(!picks) return false;
+    if(round === 'round1' || round === 'round2' || round === 'sweet16' || round === 'elite8'){
+      // Check if they have at least one pick for any region in this round
+      for(const rk of Object.keys(REGIONS)){
+        for(const m of Object.values(state.bracket[rk]?.[round] || {})){
+          if(picks[`${rk}_${round}_${m.id}`]) return true;
+        }
+      }
+      return false;
+    } else if(round === 'finalFour'){
+      return !!(picks['finalFour_sf1'] || picks['finalFour_sf2']);
+    } else if(round === 'championship'){
+      return !!picks['championship'];
+    }
+    return false;
+  }
+
+  function allPicksForRound(username, round){
+    const picks = state.picks?.[username];
+    if(!picks) return false;
+    if(round === 'round1' || round === 'round2' || round === 'sweet16' || round === 'elite8'){
+      for(const rk of Object.keys(REGIONS)){
+        for(const m of Object.values(state.bracket[rk]?.[round] || {})){
+          if(!picks[`${rk}_${round}_${m.id}`]) return false;
+        }
+      }
+      return true;
+    } else if(round === 'finalFour'){
+      return !!(picks['finalFour_sf1'] && picks['finalFour_sf2']);
+    } else if(round === 'championship'){
+      return !!picks['championship'];
+    }
+    return false;
+  }
+
+  const sorted = allUsers.sort((a,b) => {
+    const sA = state.scores?.[a[0]] || 0;
+    const sB = state.scores?.[b[0]] || 0;
+    return sB - sA;
+  });
+
+  // Count who still needs to submit for current round
+  const notSubmitted = sorted.filter(([uname]) => !allPicksForRound(uname, cur));
+
+  let summaryHtml = '';
+  if(notSubmitted.length === 0){
+    summaryHtml = `<div class="ibox ok">✅ Everyone has submitted picks for <strong>${ALL_RND_NAME[cur]}</strong>! Safe to advance.</div>`;
+  } else {
+    const names = notSubmitted.map(([uname]) => state.users[uname]?.displayName || uname).join(', ');
+    summaryHtml = `<div class="ibox warn">⏳ <strong>${notSubmitted.length} player${notSubmitted.length!==1?'s':''}</strong> still need to submit picks for <strong>${ALL_RND_NAME[cur]}</strong>:<br><span style="font-weight:400;">${names}</span></div>`;
+  }
+
+  const roundHeaders = relevantRounds.map(r =>
+    `<th style="text-align:center;min-width:42px;" title="${ALL_RND_NAME[r]}">${roundNames[r]}</th>`
+  ).join('');
+
+  const rows = sorted.map(([uname, userData], i) => {
+    const score  = state.scores?.[uname] || 0;
+    const picks  = state.picks?.[uname] || {};
+    const dn     = userData.displayName || uname;
+    const cp     = picks.championPick || '—';
+    const cpOk   = state.champion && cp === state.champion;
+    const rank   = i + 1;
+    const rankCls= rank===1?'rb1':rank===2?'rb2':rank===3?'rb3':'rbo';
+
+    const roundCells = relevantRounds.map(r => {
+      const complete = allPicksForRound(uname, r);
+      const partial  = !complete && hasPicksForRound(uname, r);
+      const isCur    = r === cur;
+      let icon, bg;
+      if(complete){
+        icon = '✅';
+        bg   = 'background:#edfaf3;';
+      } else if(partial){
+        icon = '⚠️';
+        bg   = 'background:#fff8f0;';
+      } else {
+        icon = isCur ? '❌' : '—';
+        bg   = isCur ? 'background:#fdf0f0;' : '';
+      }
+      return `<td style="text-align:center;font-size:0.82rem;${bg}" title="${complete?'All picks submitted':partial?'Partial picks':'No picks submitted'}">${icon}</td>`;
+    }).join('');
+
+    return `<tr>
+      <td><span class="rank-b ${rankCls}">${rank}</span></td>
+      <td><strong>${dn}</strong><br><span style="font-size:0.72rem;color:#8aa0b8;">${uname}</span></td>
+      <td><strong style="color:#ff6600;">${score}</strong> pts</td>
+      <td>${cp}${cpOk?' ✅':''}</td>
+      ${roundCells}
+    </tr>`;
+  }).join('');
+
+  document.getElementById('leaderboard-area').innerHTML = `
+    ${summaryHtml}
+    <div style="overflow-x:auto;">
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Points</th>
+            <th>Champion Pick</th>
+            ${roundHeaders}
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;font-size:0.76rem;color:#8aa0b8;">
+      ✅ All picks submitted &nbsp;|&nbsp; ⚠️ Partial picks &nbsp;|&nbsp; ❌ No picks (current round) &nbsp;|&nbsp; — Not yet active
+    </div>
+  `;
+}
 // ═══════════════════════════════════════════
 //  RESET
 // ═══════════════════════════════════════════
