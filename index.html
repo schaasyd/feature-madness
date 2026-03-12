@@ -1136,20 +1136,47 @@ function pickTeam(k,t){ userPicks[k]=t; renderPicksArea(); document.getElementBy
 
 async function submitPicks(){
   if(!currentUser){ toast('Not signed in!','err'); return; }
+
   const missing=getRequiredKeys().filter(k=>!userPicks[k]);
   if(missing.length){
     const b=document.getElementById('validation-banner');
     b.textContent=`⚠️ ${missing.length} pick${missing.length!==1?'s':''} missing! Select a winner for every matchup before saving.`;
     b.classList.add('show');
     b.scrollIntoView({behavior:'smooth',block:'center'});
-    toast(`${missing.length} pick${missing.length!==1?'s':''} still needed!`,'err'); return;
+    toast(`${missing.length} pick${missing.length!==1?'s':''} still needed!`,'err');
+    return;
   }
+
   document.getElementById('validation-banner').classList.remove('show');
-  if(!state.picks) state.picks={};
-  state.picks[currentUser.username]={...userPicks,_displayName:currentUser.displayName};
-  calculateScores();
-  try{ await setData(state); toast('Picks saved! 🎉','ok'); }
-  catch(e){ toast('Save failed: '+e.message,'err'); }
+
+  // Disable save button and show saving state
+  const saveBtn=document.querySelector('[onclick="submitPicks()"]');
+  if(saveBtn){ saveBtn.disabled=true; saveBtn.textContent='💾 Saving…'; }
+
+  try{
+    // Always get fresh state from Firebase before writing
+    // to avoid overwriting other users' picks
+    await getData();
+
+    if(!state.picks) state.picks={};
+    state.picks[currentUser.username]={...userPicks, _displayName:currentUser.displayName};
+    calculateScores();
+
+    await setData(state);
+
+    // Re-sync userPicks FROM confirmed Firebase state
+    userPicks=JSON.parse(JSON.stringify(state.picks[currentUser.username]||{}));
+
+    toast('Picks saved! 🎉','ok');
+    renderPicksArea();
+
+  }catch(e){
+    toast('Save failed — please try again: '+e.message,'err');
+    console.error('submitPicks failed:', e);
+  } finally {
+    // Always re-enable save button
+    if(saveBtn){ saveBtn.disabled=false; saveBtn.textContent='💾 Save All Picks'; }
+  }
 }
 
 // ═══════════════════════════════════════════
