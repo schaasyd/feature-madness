@@ -18,7 +18,7 @@
     .logo-sub      { font-size:0.44rem; color:#90b8e0; letter-spacing:1.5px; }
     .logo-strategy { font-size:1rem; font-weight:900; color:#ff6600; letter-spacing:3px; }
     .header-text h1 { font-size:1.7rem; font-weight:900; letter-spacing:2px; color:#fff; }
-    .header-text p  { color:#90b8e0; margin-top:3px; font-size:0.88rem; } 
+    .header-text p  { color:#90b8e0; margin-top:3px; font-size:0.88rem; }
 
     nav { display:flex; justify-content:center; gap:8px; padding:10px 16px; background:#fff; flex-wrap:wrap; border-bottom:2px solid #dde6f0; box-shadow:0 2px 8px rgba(0,0,0,0.06); align-items:center; }
     nav button { background:#f0f5fa; color:#2a4a6a; border:1px solid #c8d8e8; padding:8px 16px; border-radius:7px; cursor:pointer; font-size:0.86rem; font-weight:600; transition:all 0.2s; }
@@ -30,7 +30,6 @@
     .page { display:none; padding:16px; }
     .page.active { display:block; }
 
-    /* ── BRACKET ── */
     .bracket-scroll { overflow-x:auto; overflow-y:hidden; padding-bottom:16px; background:#f0f5fa; border-radius:12px; border:1px solid #c8d8e8; }
     .bracket-wrapper { display:flex; align-items:stretch; min-width:1500px; }
     .bracket-half { display:flex; flex-direction:column; flex:1; }
@@ -54,8 +53,8 @@
     .rc-e8  .game-slot { height:512px; }
 
     .game-slot { position:relative; display:flex; flex-direction:column; justify-content:center; }
-    .bracket-half.left  .game-slot { padding:2px 10px 2px 3px; } /* connector stub on right */
-    .bracket-half.right .game-slot { padding:2px 3px 2px 10px; } /* connector stub on left */
+    .bracket-half.left  .game-slot { padding:2px 10px 2px 3px; }
+    .bracket-half.right .game-slot { padding:2px 3px 2px 10px; }
 
     .bracket-half.left .round-col:not(.rc-e8) .game-slot.pair-top::after    { content:''; position:absolute; right:4px; top:50%; height:50%; width:2px; background:#b0c4d8; }
     .bracket-half.left .round-col:not(.rc-e8) .game-slot.pair-bottom::after { content:''; position:absolute; right:4px; top:0;   height:50%; width:2px; background:#b0c4d8; }
@@ -142,14 +141,12 @@
     .modal p  { color:#2a4a6a; margin-bottom:18px; font-size:0.86rem; line-height:1.6; white-space:pre-line; }
     .modal-btns { display:flex; gap:9px; justify-content:flex-end; }
 
-    /* User prediction highlights */
     .bkt-team.pick-correct   { outline:2px solid #27ae60; outline-offset:-2px; }
     .bkt-team.pick-incorrect { outline:2px solid #e74c3c; outline-offset:-2px; }
     .pick-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
     .pick-dot.correct   { background:#27ae60; }
     .pick-dot.incorrect { background:#e74c3c; }
 
-    /* ── AUTH ── */
     #auth-screen { display:none; position:fixed; inset:0; background:#e8eef4; z-index:2000; align-items:center; justify-content:center; }
     #auth-screen.open { display:flex; }
     .auth-box { background:#fff; border:1px solid #c8d8e8; border-radius:16px; padding:36px; max-width:420px; width:90%; text-align:center; box-shadow:0 8px 32px rgba(0,52,120,0.12); }
@@ -163,13 +160,6 @@
     .auth-panel.active { display:block; }
     .auth-error { color:#c0392b; font-size:0.8rem; margin-bottom:10px; display:none; background:#fdf0f0; border-radius:6px; padding:8px 10px; }
     .auth-hint { font-size:0.76rem; color:#5a80a0; background:#f0f5fa; border-radius:6px; padding:8px 10px; margin-bottom:12px; line-height:1.5; }
-
-    /* ── TOKEN SETUP (admin only, shown after first login) ── */
-    #token-setup { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:3000; align-items:center; justify-content:center; }
-    #token-setup.open { display:flex; }
-    .token-box { background:#fff; border:1px solid #c8d8e8; border-radius:14px; padding:28px; max-width:440px; width:90%; box-shadow:0 8px 32px rgba(0,0,0,0.15); }
-    .token-box h3 { color:#003478; margin-bottom:8px; }
-    .token-box p  { color:#5a80a0; font-size:0.84rem; margin-bottom:16px; line-height:1.5; }
 
     input[type="text"],input[type="password"] { background:#f7fafd; border:1px solid #c8d8e8; color:#0a1628; padding:10px 12px; border-radius:7px; font-size:0.86rem; width:100%; margin-bottom:10px; outline:none; transition:border-color 0.2s; }
     input:focus { border-color:#003478; background:#fff; }
@@ -218,7 +208,7 @@
 </head>
 <body>
 
-<!-- ══ AUTH SCREEN ══ -->
+<!-- AUTH SCREEN -->
 <div id="auth-screen" class="open">
   <div class="auth-box">
     <div class="auth-logo-mark">
@@ -228,12 +218,10 @@
     </div>
     <h2 style="margin-top:10px;">🏀 Feature Madness 2026</h2>
     <p>Sign in or create an account to submit your picks.</p>
-
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
       <button class="auth-tab"        onclick="switchAuthTab('register')">Register</button>
     </div>
-
     <div id="auth-login" class="auth-panel active">
       <div id="login-error" class="auth-error"></div>
       <label>Username</label>
@@ -243,7 +231,6 @@
              onkeydown="if(event.key==='Enter') doLogin()">
       <button class="btn btn-p" style="width:100%;margin-top:4px;" onclick="doLogin()">Sign In →</button>
     </div>
-
     <div id="auth-register" class="auth-panel">
       <div id="register-error" class="auth-error"></div>
       <div class="auth-hint">📝 No GitHub account needed — just pick a username and password!</div>
@@ -256,32 +243,13 @@
              onkeydown="if(event.key==='Enter') doRegister()">
       <button class="btn btn-p" style="width:100%;margin-top:4px;" onclick="doRegister()">Create Account →</button>
     </div>
-
     <div id="auth-loading" style="display:none;padding:20px 0;">
       <div class="spinner"></div>
     </div>
   </div>
 </div>
 
-<!-- ══ ADMIN TOKEN SETUP (shown after admin first login) ══ -->
-<div id="token-setup" class="open" style="display:none;">
-  <div class="token-box">
-    <h3>🔑 Connect GitHub (Admin Only)</h3>
-    <p>You're registered as admin. Enter your GitHub Personal Access Token to enable tournament management.<br><br>
-    <strong>GitHub → Settings → Developer Settings → Personal Access Tokens (classic)</strong><br>
-    Check <strong>repo</strong> scope, then Configure SSO → Authorize ford-innersource.</p>
-    <div id="token-setup-error" class="auth-error"></div>
-    <label>Personal Access Token</label>
-    <input type="password" id="token-setup-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-           onkeydown="if(event.key==='Enter') submitTokenSetup()">
-    <div style="display:flex;gap:8px;margin-top:4px;">
-      <button class="btn btn-g" style="flex:1;" onclick="skipTokenSetup()">Skip for now</button>
-      <button class="btn btn-p" style="flex:2;" onclick="submitTokenSetup()">Connect & Continue →</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══ HEADER ══ -->
+<!-- HEADER -->
 <header>
   <div class="logo-mark">
     <span class="logo-feature">FEATURE</span>
@@ -338,15 +306,11 @@
 <div id="page-admin" class="page">
   <div class="panel">
     <h2>⚙️ Tournament Control</h2>
-    <div id="token-status-banner"></div>
     <div class="btn-row">
       <button class="btn btn-s" onclick="initTournament()">🚀 Initialize</button>
       <button class="btn btn-o" onclick="advanceRoundByVotes()">⏭️ Tally Votes & Advance</button>
       <button class="btn btn-p" onclick="loadData()">🔄 Refresh</button>
       <button class="btn btn-d" onclick="confirmReset()">🗑️ Reset</button>
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-g" onclick="openTokenSetup()">🔑 Update GitHub Token</button>
     </div>
     <div id="tournament-status"></div>
   </div>
@@ -374,22 +338,19 @@
 
 <script>
 // ═══════════════════════════════════════════
-//  CONFIG
+//  CONFIG — replace these two values!
 // ═══════════════════════════════════════════
-const GH_OWNER  = 'schaasyd';
-const GH_REPO   = 'feature-madness';
-const GH_BRANCH = 'main';
-const GH_FILE   = 'data.json';
-const GH_API    = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
-const ADMIN_USERS = ['sschaaf2'];
-const WRITE_TOKEN = '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'; // your personal access token here
+const JSONBIN_BIN_ID  = '69b2ca56c3097a1dd51c93a7';
+const JSONBIN_API_KEY = '$2a$10$YTWBq2BOVq5RAwdlBMdPXuGHyoyMvsbF9DVtPmSJjuaWPixOeb0UC';
+const JSONBIN_API     = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+const ADMIN_USERS     = ['sschaaf2'];
 
 // ═══════════════════════════════════════════
 //  TOURNAMENT DATA
 // ═══════════════════════════════════════════
 const REGIONS = {
   east:{ name:'East', emoji:'🔵', r1:[
-    {id:'m1',sA:1, tA:'Remote Start',          sB:16,tB:'Smart Hitch'},
+    {id:'m1',sA:1, tA:'Remote Start',           sB:16,tB:'Smart Hitch'},
     {id:'m2',sA:8, tA:'BlueCruise',             sB:9, tB:'Trail Control'},
     {id:'m3',sA:5, tA:'Android Auto',           sB:12,tB:'Multi-Access Tailgate'},
     {id:'m4',sA:4, tA:'Selectable Drive Modes', sB:13,tB:'Vehicle Health Alert'},
@@ -400,13 +361,13 @@ const REGIONS = {
   ]},
   west:{ name:'West', emoji:'🔴', r1:[
     {id:'m1',sA:1, tA:'Seat Temperature Control',  sB:16,tB:'Rapid Launch'},
-    {id:'m2',sA:8, tA:'Pre-Collision Assist',        sB:9, tB:'WiFi Hotspot'},
-    {id:'m3',sA:5, tA:'Stolen Vehicle Services',     sB:12,tB:'Charge & Departure Scheduling'},
-    {id:'m4',sA:4, tA:'Power Running Boards',        sB:13,tB:'Forward Facing Spotlight'},
-    {id:'m5',sA:6, tA:'Telematics Data Collection',  sB:11,tB:'Trailer Profiles & Settings'},
-    {id:'m6',sA:3, tA:'Voice Recognition Systems',   sB:14,tB:'Rejuvenate'},
-    {id:'m7',sA:7, tA:'Police Dark Car',             sB:10,tB:'Trail 1-Pedal Driving'},
-    {id:'m8',sA:2, tA:'Heated Mirrors',              sB:15,tB:'Delivery Assist'},
+    {id:'m2',sA:8, tA:'Pre-Collision Assist',       sB:9, tB:'WiFi Hotspot'},
+    {id:'m3',sA:5, tA:'Stolen Vehicle Services',    sB:12,tB:'Charge & Departure Scheduling'},
+    {id:'m4',sA:4, tA:'Power Running Boards',       sB:13,tB:'Forward Facing Spotlight'},
+    {id:'m5',sA:6, tA:'Telematics Data Collection', sB:11,tB:'Trailer Profiles & Settings'},
+    {id:'m6',sA:3, tA:'Voice Recognition Systems',  sB:14,tB:'Rejuvenate'},
+    {id:'m7',sA:7, tA:'Police Dark Car',            sB:10,tB:'Trail 1-Pedal Driving'},
+    {id:'m8',sA:2, tA:'Heated Mirrors',             sB:15,tB:'Delivery Assist'},
   ]},
   south:{ name:'South', emoji:'🟢', r1:[
     {id:'m1',sA:1, tA:'Fog Lights (Front)',  sB:16,tB:'Drift Brake'},
@@ -433,101 +394,43 @@ const REGIONS = {
 const ALL_TEAMS=Object.entries(REGIONS).flatMap(([,r])=>
   r.r1.flatMap(m=>[{name:m.tA,seed:m.sA,region:r.name,emoji:r.emoji},{name:m.tB,seed:m.sB,region:r.name,emoji:r.emoji}])
 );
-const REG_ROUNDS=['round1','round2','sweet16','elite8'];
-const REG_RND_NAME={round1:'Round 1',round2:'Round 2',sweet16:'Sweet 16',elite8:'Elite 8'};
-const ALL_RND_NAME={round1:'Round 1',round2:'Round 2',sweet16:'Sweet 16',elite8:'Elite 8',finalFour:'Final Four',championship:'Championship'};
-const RND_PTS={round1:1,round2:2,sweet16:4,elite8:8,finalFour:16,championship:32,championPick:64};
-const RC_CLASS_MAP={round1:'rc-r1',round2:'rc-r2',sweet16:'rc-s16',elite8:'rc-e8'};
+const REG_ROUNDS   = ['round1','round2','sweet16','elite8'];
+const REG_RND_NAME = {round1:'Round 1',round2:'Round 2',sweet16:'Sweet 16',elite8:'Elite 8'};
+const ALL_RND_NAME = {round1:'Round 1',round2:'Round 2',sweet16:'Sweet 16',elite8:'Elite 8',finalFour:'Final Four',championship:'Championship'};
+const RND_PTS      = {round1:1,round2:2,sweet16:4,elite8:8,finalFour:16,championship:32,championPick:64};
+const RC_CLASS_MAP = {round1:'rc-r1',round2:'rc-r2',sweet16:'rc-s16',elite8:'rc-e8'};
 
 // ═══════════════════════════════════════════
 //  STATE
 // ═══════════════════════════════════════════
-let state=null, fileSHA=null, GH_TOKEN='', currentUser=null, userPicks={};
+let state=null, currentUser=null, userPicks={};
 
 // ═══════════════════════════════════════════
-//  TOKEN HELPERS
-//  The admin token is stored in localStorage
-//  under 'fm_admin_token'. All GitHub API
-//  calls use this single token. Regular users
-//  just need username/password — no token.
-// ═══════════════════════════════════════════
-function getAdminToken(){ return localStorage.getItem('fm_admin_token')||''; }
-function saveAdminToken(t){ localStorage.setItem('fm_admin_token',t); GH_TOKEN=t; }
-
-// ═══════════════════════════════════════════
-//  TOKEN SETUP MODAL (admin only)
-// ═══════════════════════════════════════════
-function openTokenSetup(){
-  document.getElementById('token-setup-input').value='';
-  document.getElementById('token-setup-error').style.display='none';
-  document.getElementById('token-setup').style.display='flex';
-  setTimeout(()=>document.getElementById('token-setup-input').focus(),100);
-}
-
-function skipTokenSetup(){
-  document.getElementById('token-setup').style.display='none';
-  updateTokenStatusBanner();
-}
-
-async function submitTokenSetup(){
-  const t=document.getElementById('token-setup-input').value.trim();
-  const errEl=document.getElementById('token-setup-error');
-  errEl.style.display='none';
-  if(!t){ errEl.textContent='Please enter a token.'; errEl.style.display='block'; return; }
-
-  GH_TOKEN=t;
-  try{
-    await getData();
-    saveAdminToken(t);
-    document.getElementById('token-setup').style.display='none';
-    updateTokenStatusBanner();
-    renderAll();
-    toast('GitHub connected! ✅','ok');
-  }catch(e){
-    errEl.textContent='❌ Connection failed. Check token & SSO authorization.';
-    errEl.style.display='block';
-    GH_TOKEN=getAdminToken(); // revert
-  }
-}
-
-function updateTokenStatusBanner(){
-  const el=document.getElementById('token-status-banner');
-  if(!el) return;
-  const hasToken=!!getAdminToken();
-  el.innerHTML=hasToken
-    ?'<div class="ibox ok" style="margin-bottom:14px;">✅ GitHub connected. Tournament controls active.</div>'
-    :'<div class="ibox warn" style="margin-bottom:14px;">⚠️ GitHub token not connected. Click <strong>Update GitHub Token</strong> below to enable tournament controls.</div>';
-}
-
-// ═══════════════════════════════════════════
-//  GITHUB API
+//  JSONBIN API
 // ═══════════════════════════════════════════
 async function getData(){
-  // Public repo — no auth needed for reads
-  const res=await fetch(`${GH_API}?ref=${GH_BRANCH}&t=${Date.now()}`,{
-    headers:{'Accept':'application/vnd.github.v3+json'}
+  const res=await fetch(`${JSONBIN_API}/latest`,{
+    headers:{
+      'X-Master-Key': JSONBIN_API_KEY,
+      'X-Bin-Meta': 'false'
+    }
   });
   if(!res.ok) throw new Error(`GET ${res.status}`);
-  const json=await res.json();
-  fileSHA=json.sha;
-  state=JSON.parse(atob(json.content.replace(/\n/g,'')));
+  state=await res.json();
 }
 
 async function setData(data){
-  const token = GH_TOKEN || WRITE_TOKEN;
-  if(!token){ toast('No write token available!','err'); return; }
-  const content=btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))));
-  const body={message:'Update tournament data',content,branch:GH_BRANCH};
-  if(fileSHA) body.sha=fileSHA;
-  const res=await fetch(GH_API,{
+  const res=await fetch(JSONBIN_API,{
     method:'PUT',
-    headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
-    body:JSON.stringify(body)
+    headers:{
+      'Content-Type':'application/json',
+      'X-Master-Key': JSONBIN_API_KEY
+    },
+    body:JSON.stringify(data)
   });
-  if(!res.ok){ const e=await res.json(); throw new Error(`PUT ${res.status}: ${e.message}`); }
+  if(!res.ok){ const e=await res.json(); throw new Error(`PUT ${res.status}: ${e.message||'unknown'}`); }
   const result=await res.json();
-  fileSHA=result.content.sha;
-  state=data;
+  state=result.record;
 }
 
 async function loadData(){
@@ -560,21 +463,6 @@ async function doRegister(){
   }
   if(!/^[a-z0-9_]+$/.test(username)){
     errEl.textContent='❌ Username: letters, numbers, underscores only.'; errEl.style.display='block'; return;
-  }
-
-  // Need a GitHub token to read/write data.json
-  GH_TOKEN=getAdminToken();
-  if(!GH_TOKEN){
-    // If this is an admin registering for the first time, they need a token first
-    if(ADMIN_USERS.includes(username)){
-      errEl.textContent=''; errEl.style.display='none';
-      setAuthLoading(false);
-      // Save partial info and open token setup
-      localStorage.setItem('fm_pending_reg', JSON.stringify({displayName, username, password}));
-      document.getElementById('auth-screen').classList.remove('open');
-      openTokenSetup();
-      return;
-    }
   }
 
   setAuthLoading(true);
@@ -612,24 +500,6 @@ async function doLogin(){
     errEl.textContent='❌ Enter username and password.'; errEl.style.display='block'; return;
   }
 
-  // Use stored admin token for the GitHub read
-  GH_TOKEN=getAdminToken();
-
-  // Special case: admin logging in on a fresh device with no token sTtored
-  if(ADMIN_USERS.includes(username) && !GH_TOKEN){
-    // We can't verify the password without reading data.json
-    // So: store the pending login and prompt for token
-    localStorage.setItem('fm_pending_login', JSON.stringify({username, password}));
-    document.getElementById('auth-screen').classList.remove('open');
-    openTokenSetup();
-    return;
-  }
-
-  // Non-admin users don't need a stored token — embedded read token handles it
-  if(!GH_TOKEN && !ADMIN_USERS.includes(username)){
-    GH_TOKEN = ''; // will use EMBEDDED_READ_TOKEN in getData()
-  }
-
   setAuthLoading(true);
   try{ await getData(); }catch(e){
     setAuthLoading(false);
@@ -655,31 +525,19 @@ async function doLogin(){
 function finishLogin(username, displayName){
   const isAdmin=ADMIN_USERS.includes(username);
   currentUser={username, displayName, isAdmin};
-  // Persist session (not token — token already in localStorage)
   localStorage.setItem('fm_session', JSON.stringify({username, displayName}));
-
   document.getElementById('auth-screen').classList.remove('open');
   document.getElementById('user-chip').style.display='flex';
   document.getElementById('user-chip-name').textContent=displayName;
-
-  // Always show admin tab for admin users
   document.getElementById('admin-nav-btn').style.display=isAdmin?'':'none';
-
   userPicks=JSON.parse(JSON.stringify(state?.picks?.[username]||{}));
   renderAll();
   toast(`Welcome, ${displayName}! 🏀`,'ok');
-
-  // If admin and no token yet, show token setup
-  if(isAdmin && !getAdminToken()){
-    setTimeout(openTokenSetup, 500);
-  }
 }
 
 function doLogout(){
   currentUser=null; userPicks={};
   localStorage.removeItem('fm_session');
-  localStorage.removeItem('fm_pending_login');
-  localStorage.removeItem('fm_pending_reg');
   document.getElementById('auth-screen').classList.add('open');
   document.getElementById('user-chip').style.display='none';
   document.getElementById('admin-nav-btn').style.display='none';
@@ -695,89 +553,21 @@ function setAuthLoading(show){
     .forEach(el=>el.disabled=show);
 }
 
-// Auto-login from stored session
 async function tryAutoLogin(){
   const session=localStorage.getItem('fm_session');
   if(!session) return false;
   const {username, displayName}=JSON.parse(session);
-  GH_TOKEN=getAdminToken(); // may be empty for non-admin devices, that's OK
   try{
-    await getData(); // getData now falls back to EMBEDDED_READ_TOKEN
+    await getData();
     if(!state.users?.[username]) return false;
     finishLogin(username, displayName);
     return true;
   }catch(e){ return false; }
 }
 
-// Complete pending admin registration after token is entered
-async function completePendingAction(){
-  const pendingReg=localStorage.getItem('fm_pending_reg');
-  const pendingLogin=localStorage.getItem('fm_pending_login');
-
-  if(pendingReg){
-    localStorage.removeItem('fm_pending_reg');
-    const {displayName, username, password}=JSON.parse(pendingReg);
-    if(!state.users) state.users={};
-    if(!state.users[username]){
-      const hash=await sha256(password);
-      state.users[username]={displayName, passwordHash:hash};
-      await setData(state);
-    }
-    finishLogin(username, displayName);
-  } else if(pendingLogin){
-    localStorage.removeItem('fm_pending_login');
-    const {username, password}=JSON.parse(pendingLogin);
-    const user=state.users?.[username];
-    if(user){
-      const hash=await sha256(password);
-      if(hash===user.passwordHash){
-        finishLogin(username, user.displayName);
-        return;
-      }
-    }
-    // Password check failed — show auth screen again
-    document.getElementById('auth-screen').classList.add('open');
-    document.getElementById('login-error').textContent='❌ Incorrect password.';
-    document.getElementById('login-error').style.display='block';
-  }
-}
-
 async function sha256(str){
   const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-
-// ═══════════════════════════════════════════
-//  TOKEN SETUP — completion handler
-// ═══════════════════════════════════════════
-// Override submitTokenSetup to also handle pending actions
-const _origSubmit = submitTokenSetup;
-async function submitTokenSetup(){
-  const t=document.getElementById('token-setup-input').value.trim();
-  const errEl=document.getElementById('token-setup-error');
-  errEl.style.display='none';
-  if(!t){ errEl.textContent='Please enter a token.'; errEl.style.display='block'; return; }
-
-  GH_TOKEN=t;
-  try{
-    await getData();
-    saveAdminToken(t);
-    document.getElementById('token-setup').style.display='none';
-
-    // Handle pending registration or login
-    const hasPending=localStorage.getItem('fm_pending_reg')||localStorage.getItem('fm_pending_login');
-    if(hasPending){
-      await completePendingAction();
-    } else {
-      updateTokenStatusBanner();
-      renderAll();
-      toast('GitHub connected! ✅','ok');
-    }
-  }catch(e){
-    errEl.textContent='❌ Connection failed. Check token & SSO authorization.';
-    errEl.style.display='block';
-    GH_TOKEN=getAdminToken();
-  }
 }
 
 // ═══════════════════════════════════════════
@@ -805,11 +595,7 @@ function renderAll(){
   if(!state) return;
   renderStatusBar();
   renderBracket();
-  if(currentUser?.isAdmin){
-    renderTournamentStatus();
-    updateTokenStatusBanner();
-    renderAdminTabs();
-  }
+  if(currentUser?.isAdmin){ renderTournamentStatus(); renderAdminTabs(); }
   if(currentUser) renderPicksArea();
 }
 
@@ -817,7 +603,6 @@ function renderAll(){
 //  INITIALIZE
 // ═══════════════════════════════════════════
 async function initTournament(){
-  if(!GH_TOKEN){ toast('Connect GitHub token first!','err'); openTokenSetup(); return; }
   const bkt={};
   for(const [rk,r] of Object.entries(REGIONS)){
     bkt[rk]={round1:{},round2:{},sweet16:{},elite8:{}};
@@ -846,7 +631,6 @@ async function initTournament(){
 //  ADVANCE
 // ═══════════════════════════════════════════
 async function advanceRoundByVotes(){
-  if(!GH_TOKEN){ toast('Connect GitHub token first!','err'); openTokenSetup(); return; }
   if(!state) return;
   const cur=state.meta.currentRound;
   const lines=[];
@@ -968,15 +752,9 @@ function buildHalf(side,keys,bkt){
 
 function buildRegionBlock(rk,rd,mirrored){
   if(!rd) return '';
-  // Right bracket: E8 is leftmost (innermost, near center), R1 is rightmost (outer)
-  const rounds=REG_ROUNDS;
-  const cols=rounds.map((round,colIdx)=>{
+  const cols=REG_ROUNDS.map((round)=>{
     const ms=Object.values(rd[round]||{});
     const showVotes=isRoundComplete(round);
-    // For right bracket: pair connectors attach on RIGHT side of each column
-    // outermost column = the one with no further rounds to connect to
-    // left bracket  → outermost = elite8 (last col, no right connector needed)
-    // right bracket → outermost = elite8 (first col rendered = leftmost = closest to center, no left connector needed)
     const isE8=round==='elite8';
     return `<div class="round-col ${RC_CLASS_MAP[round]}">
       <div class="round-title">${REG_RND_NAME[round]}</div>
@@ -992,9 +770,7 @@ function buildSlot(rk,round,m,mi,showVotes,mirrored,isOutermost){
   const key=`${rk}_${round}_${m.id}`;
   const {vA,vB,total}=showVotes?getVotes(key,m.teamA,m.teamB):{vA:0,vB:0,total:0};
   const pA=total>0?Math.round(vA/total*100):50, pB=100-pA;
-
-  // Current user's pick for this matchup
-  const userPick = userPicks[key];
+  const userPick=userPicks[key];
 
   if(!m.teamA&&!m.teamB) return `<div class="game-slot ${pairCls}">
     <div class="bkt-matchup">
@@ -1003,13 +779,11 @@ function buildSlot(rk,round,m,mi,showVotes,mirrored,isOutermost){
     </div></div>`;
 
   const aW=m.winner===m.teamA, bW=m.winner===m.teamB;
-
-  // Determine pick correctness (only relevant if round is complete)
-  const roundDone = isRoundComplete(round);
-  const aPickClass = getPickClass(m.teamA, userPick, m.winner, roundDone);
-  const bPickClass = getPickClass(m.teamB, userPick, m.winner, roundDone);
-  const aDot = getPickDot(m.teamA, userPick, m.winner, roundDone);
-  const bDot = getPickDot(m.teamB, userPick, m.winner, roundDone);
+  const roundDone=isRoundComplete(round);
+  const aPickClass=getPickClass(m.teamA,userPick,m.winner,roundDone);
+  const bPickClass=getPickClass(m.teamB,userPick,m.winner,roundDone);
+  const aDot=getPickDot(m.teamA,userPick,m.winner,roundDone);
+  const bDot=getPickDot(m.teamB,userPick,m.winner,roundDone);
 
   return `<div class="game-slot ${pairCls}">
     <div class="bkt-matchup ${m.winner?'done':''}">
@@ -1037,39 +811,36 @@ function buildSlot(rk,round,m,mi,showVotes,mirrored,isOutermost){
   </div>`;
 }
 
-// Returns CSS class for pick correctness on a team row
-function getPickClass(team, userPick, winner, roundDone){
-  if(!userPick || userPick !== team) return '';       // user didn't pick this team
-  if(!roundDone) return '';                            // round not done yet, no highlight
-  return winner === team ? 'pick-correct' : 'pick-incorrect';
+function getPickClass(team,userPick,winner,roundDone){
+  if(!userPick||userPick!==team) return '';
+  if(!roundDone) return '';
+  return winner===team?'pick-correct':'pick-incorrect';
 }
 
-// Returns a colored dot if user picked this team
-function getPickDot(team, userPick, winner, roundDone){
-  if(!userPick || userPick !== team) return '';
+function getPickDot(team,userPick,winner,roundDone){
+  if(!userPick||userPick!==team) return '';
   if(!roundDone) return '<span class="pick-dot" style="background:#003478;" title="Your pick"></span>';
-  return winner === team
-    ? '<span class="pick-dot correct" title="Correct pick!"></span>'
-    : '<span class="pick-dot incorrect" title="Incorrect pick"></span>';
+  return winner===team
+    ?'<span class="pick-dot correct" title="Correct pick!"></span>'
+    :'<span class="pick-dot incorrect" title="Incorrect pick"></span>';
 }
 
 function buildCenter(bkt){
   const ff=bkt.finalFour||{},ch=bkt.championship||{};
   const sf1=ff.sf1||{},sf2=ff.sf2||{};
-  const ffD=isRoundComplete('finalFour'), chD=isRoundComplete('championship');
+  const ffD=isRoundComplete('finalFour'),chD=isRoundComplete('championship');
   const {vA:s1A,vB:s1B}=ffD?getVotes('finalFour_sf1',sf1.teamA,sf1.teamB):{vA:0,vB:0};
   const {vA:s2A,vB:s2B}=ffD?getVotes('finalFour_sf2',sf2.teamA,sf2.teamB):{vA:0,vB:0};
   const {vA:cA, vB:cB} =chD?getVotes('championship',ch.teamA,ch.teamB):{vA:0,vB:0};
 
-  const ft=(team, winner, votes, showVotes, pickKey)=>{
+  const ft=(team,winner,votes,showVotes,pickKey)=>{
     if(!team) return `<div class="ff-team tbd">TBD</div>`;
-    const userPick = userPicks[pickKey];
-    const roundDone = showVotes; // showVotes === round is complete
-    const dot = getPickDot(team, userPick, winner, roundDone);
-    const pickCls = getPickClass(team, userPick, winner, roundDone);
+    const userPick=userPicks[pickKey];
+    const roundDone=showVotes;
+    const dot=getPickDot(team,userPick,winner,roundDone);
+    const pickCls=getPickClass(team,userPick,winner,roundDone);
     return `<div class="ff-team ${winner===team?'winner':''} ${pickCls}">
-      ${winner===team?'🏆 ':''}${team}
-      ${dot}
+      ${winner===team?'🏆 ':''}${team}${dot}
       ${showVotes&&votes>0?`<span style="color:#ff6600;font-size:0.6rem;">(${votes})</span>`:''}
     </div>`;
   };
@@ -1133,11 +904,11 @@ function renderAdminMatchups(){
   if(!el) return;
 
   if(!state.meta?.initialized){
-    el.innerHTML='<div class="ibox warn" style="grid-column:1/-1;">⚠️ Tournament not initialized. Click <strong>🚀 Initialize</strong> above to set up the bracket.</div>';
+    el.innerHTML='<div class="ibox warn" style="grid-column:1/-1;">⚠️ Tournament not initialized. Click <strong>🚀 Initialize</strong> above.</div>';
     return;
   }
 
-  let ms=[], pkFn;
+  let ms=[],pkFn;
   if(REG_ROUNDS.includes(cur)){
     ms=Object.values(state.bracket[adminTab]?.[cur]||{});
     pkFn=(m)=>`${adminTab}_${cur}_${m.id}`;
@@ -1154,10 +925,10 @@ function renderAdminMatchups(){
   el.innerHTML=ms.map((m,i)=>{
     const pk=pkFn(m);
     const {vA,vB,total}=getVotes(pk,m.teamA,m.teamB);
-    const pA=total>0?Math.round(vA/total*100):0, pB=100-pA;
+    const pA=total>0?Math.round(vA/total*100):0,pB=100-pA;
     const proj=total>0?determineWinner(m,vA,vB,m.seedA,m.seedB):null;
     const tied=vA===vB&&total>0;
-    const lA=vA>vB, lB=vB>vA;
+    const lA=vA>vB,lB=vB>vA;
     const title=REG_ROUNDS.includes(cur)
       ?`${REGIONS[adminTab].emoji} ${REGIONS[adminTab].name} — Match ${i+1}`
       :(m.label||'🏆 Championship');
@@ -1189,7 +960,7 @@ function renderAdminMatchups(){
 // ═══════════════════════════════════════════
 function getRequiredKeys(){
   if(!state) return [];
-  const cur=state.meta?.currentRound, keys=[];
+  const cur=state.meta?.currentRound,keys=[];
   if(cur==='round1') keys.push('championPick');
   if(REG_ROUNDS.includes(cur))
     for(const rk of Object.keys(REGIONS))
@@ -1206,14 +977,13 @@ function renderPicksArea(){
   const area=document.getElementById('picks-area');
 
   if(!state.meta?.initialized){
-    area.innerHTML='<div class="panel"><div class="ibox warn">⏳ The tournament hasn\'t started yet! The admin will initialize the bracket shortly. Check back soon.</div></div>';
+    area.innerHTML='<div class="panel"><div class="ibox warn">⏳ The tournament hasn\'t started yet! Check back soon.</div></div>';
     return;
   }
 
   const cur=state.meta?.currentRound;
   let html='';
 
-  // Champion pick — Round 1 only
   if(cur==='round1'){
     const sel=userPicks.championPick||null;
     html+=`<div class="panel">
@@ -1234,7 +1004,7 @@ function renderPicksArea(){
       if(!ms.length) continue;
       html+=`<div class="panel"><h2>${r.emoji} ${r.name} Region</h2><div class="grid-cards">`+
         ms.map((m,i)=>{
-          const key=`${rk}_${cur}_${m.id}`, pick=userPicks[key];
+          const key=`${rk}_${cur}_${m.id}`,pick=userPicks[key];
           return `<div class="card" id="card-${key}">
             <h4>${r.emoji} ${r.name} — Match ${i+1}</h4>
             ${!pick?'<div style="font-size:0.72rem;color:#c0392b;margin-bottom:5px;font-weight:600;">⚠️ Pick required</div>':''}
@@ -1255,7 +1025,7 @@ function renderPicksArea(){
   } else if(cur==='finalFour'){
     html+=`<div class="panel"><h2>🏀 Final Four</h2><div class="grid-cards">`+
       Object.values(state.bracket.finalFour||{}).map(g=>{
-        const key=`finalFour_${g.id}`, pick=userPicks[key];
+        const key=`finalFour_${g.id}`,pick=userPicks[key];
         return `<div class="card" id="card-${key}">
           <h4>${g.label}</h4>
           ${!pick?'<div style="font-size:0.72rem;color:#c0392b;margin-bottom:5px;font-weight:600;">⚠️ Pick required</div>':''}
@@ -1272,7 +1042,7 @@ function renderPicksArea(){
         </div>`;
       }).join('')+`</div></div>`;
   } else if(cur==='championship'){
-    const ch=state.bracket.championship||{}, pick=userPicks.championship;
+    const ch=state.bracket.championship||{},pick=userPicks.championship;
     html+=`<div class="panel"><h2>🏆 Championship</h2><div class="grid-cards">
       <div class="card" id="card-championship">
         <h4>National Championship</h4>
@@ -1313,7 +1083,7 @@ async function submitPicks(){
   }
   document.getElementById('validation-banner').classList.remove('show');
   if(!state.picks) state.picks={};
-  state.picks[currentUser.username]={...userPicks, _displayName:currentUser.displayName};
+  state.picks[currentUser.username]={...userPicks,_displayName:currentUser.displayName};
   calculateScores();
   try{ await setData(state); toast('Picks saved! 🎉','ok'); }
   catch(e){ toast('Save failed: '+e.message,'err'); }
@@ -1353,9 +1123,9 @@ async function loadLeaderboard(){
   el.innerHTML=`<table class="lb-table">
     <thead><tr><th>Rank</th><th>Name</th><th>Points</th><th>Champion Pick</th></tr></thead>
     <tbody>${sorted.map(([uname,score],i)=>{
-      const rank=i+1, cls=rank===1?'rb1':rank===2?'rb2':rank===3?'rb3':'rbo';
+      const rank=i+1,cls=rank===1?'rb1':rank===2?'rb2':rank===3?'rb3':'rbo';
       const p=state.picks?.[uname]||{};
-      const dn=p._displayName||uname, cp=p.championPick||'—', ok=state.champion&&cp===state.champion;
+      const dn=p._displayName||uname,cp=p.championPick||'—',ok=state.champion&&cp===state.champion;
       return `<tr><td><span class="rank-b ${cls}">${rank}</span></td>
         <td><strong>${dn}</strong></td>
         <td><strong style="color:#ff6600;">${score}</strong> pts</td>
@@ -1374,13 +1144,13 @@ function confirmReset(){
         meta:{initialized:false,currentRound:'round1',
           roundStatus:{round1:'pending',round2:'pending',sweet16:'pending',elite8:'pending',finalFour:'pending',championship:'pending'}},
         bracket:{
-          east:{round1:{},round2:{},sweet16:{},elite8:{}}, west:{round1:{},round2:{},sweet16:{},elite8:{}},
-          south:{round1:{},round2:{},sweet16:{},elite8:{}}, midwest:{round1:{},round2:{},sweet16:{},elite8:{}},
+          east:{round1:{},round2:{},sweet16:{},elite8:{}},west:{round1:{},round2:{},sweet16:{},elite8:{}},
+          south:{round1:{},round2:{},sweet16:{},elite8:{}},midwest:{round1:{},round2:{},sweet16:{},elite8:{}},
           finalFour:{sf1:{id:'sf1',label:'East vs South',teamA:null,teamB:null,winner:null},
                      sf2:{id:'sf2',label:'West vs Midwest',teamA:null,teamB:null,winner:null}},
           championship:{teamA:null,teamB:null,winner:null}
         },
-        champion:null, picks:{}, scores:{}, users:state?.users||{}
+        champion:null,picks:{},scores:{},users:state?.users||{}
       };
       try{ await setData(ns); userPicks={}; renderAll(); toast('Reset complete.','ok'); }
       catch(e){ toast('Reset failed: '+e.message,'err'); }
@@ -1397,7 +1167,7 @@ function showPage(id,e){
   document.getElementById(`page-${id}`).classList.add('active');
   if(e?.currentTarget) e.currentTarget.classList.add('active');
   if(id==='leaderboard') loadLeaderboard();
-  if(id==='admin'){ renderTournamentStatus(); updateTokenStatusBanner(); renderAdminTabs(); }
+  if(id==='admin'){ renderTournamentStatus(); renderAdminTabs(); }
   if(id==='bracket'){ renderStatusBar(); renderBracket(); }
   if(id==='picks'&&currentUser) renderPicksArea();
 }
@@ -1425,7 +1195,6 @@ function closeModal(){ document.getElementById('modal').classList.remove('open')
 (async()=>{
   const ok=await tryAutoLogin();
   if(!ok){
-    // Pre-fill username if we have a previous session
     try{
       const s=localStorage.getItem('fm_session');
       if(s) document.getElementById('login-username').value=JSON.parse(s).username;
@@ -1435,8 +1204,3 @@ function closeModal(){ document.getElementById('modal').classList.remove('open')
 </script>
 </body>
 </html>
-
-
-
-
-
