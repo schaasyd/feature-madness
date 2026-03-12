@@ -1,8 +1,15 @@
 {
-  "meta": { "initialized": false },
+  "meta": {
+    "initialized": false
+  },
   "bracket": {},
   "champion": null,
   "picks": {},
   "scores": {},
-  "users": {}
+  "users": {
+    "sschaaf2": {
+      "displayName": "Sydney",
+      "passwordHash": "32f65e6eb411ed420416c4e01971edfa34f93cb41ee92f617a46f2aa797f077a"
+    }
+  }
 }
